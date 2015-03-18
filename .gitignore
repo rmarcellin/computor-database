@@ -39,6 +39,9 @@ local.properties
 .classpath
 .settings/
 .loadpath
+.log
+.MF
+.gitignore~
  
 # Locally stored "Eclipse launch configurations"
 *.launch
