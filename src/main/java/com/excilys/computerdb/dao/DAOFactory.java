@@ -93,8 +93,8 @@ public class DAOFactory {
     				("Can't load file properties " + PROPERTIES_FILE, e);
     	}
     	
-    	DAOFactory repository = new DAOFactory(url, login, passwd);
-    	return repository;
+    	DAOFactory factory = new DAOFactory(url, login, passwd);
+    	return factory;
     }
     
     /**
