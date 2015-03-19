@@ -6,6 +6,11 @@
 	<groupId>computer-database</groupId>
 	<artifactId>computer-database</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	
+	<properties>
+		<java.version>1.8</java.version>
+		<javax.servlet.version>3.1.0</javax.servlet.version>
+	</properties>
 
 	<!-- DEPENDENCIES -->
 	<dependencies>
@@ -31,21 +36,38 @@
 			<artifactId>mockito-all</artifactId>
 			<version>1.10.19</version>
 		</dependency>
+		<!-- JSTL -->
 		
 		
+		<dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>${javax.servlet.version}</version>
+            <scope>provided</scope>
+        </dependency>	
+        <dependency>
+            <groupId>javax.servlet.jsp</groupId>
+            <artifactId>jsp-api</artifactId>
+            <version>2.2</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
+            <version>1.2</version>
+        </dependency>
 	</dependencies>
 
 	<build>
 		<sourceDirectory>src</sourceDirectory>
-		<plugins>
+		<plugins>			
 			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.1</version>
-				<configuration>
-					<source />
-					<target />
-				</configuration>
-			</plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+            </plugin>
 		</plugins>
 	</build>
 </project>
