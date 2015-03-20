@@ -1,4 +1,4 @@
-package main.java.com.excilys.computerdb.servlets;
+package com.excilys.computerdb.servlets;
 
 import java.io.IOException;
 
@@ -30,7 +30,7 @@ public class AllComputers extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		ServletContext ctx = this.getServletContext();
-		ctx.getRequestDispatcher("/jsp/index.jsp").forward( request, response );		
+		ctx.getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward( request, response );		
 	}
 
 	/**

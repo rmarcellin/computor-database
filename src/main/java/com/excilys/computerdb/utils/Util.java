@@ -1,4 +1,4 @@
-package main.java.com.excilys.computerdb.utils;
+package com.excilys.computerdb.utils;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

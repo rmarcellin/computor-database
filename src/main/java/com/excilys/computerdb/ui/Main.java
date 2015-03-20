@@ -1,4 +1,4 @@
-package main.java.com.excilys.computerdb.ui;
+package com.excilys.computerdb.ui;
 
 import java.sql.SQLException;
 

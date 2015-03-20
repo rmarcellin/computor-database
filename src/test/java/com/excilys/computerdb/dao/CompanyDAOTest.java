@@ -1,4 +1,4 @@
-package test.java.com.excilys.computerdb.dao;
+package com.excilys.computerdb.dao;
 
 import static org.junit.Assert.*;
 

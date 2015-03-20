@@ -1,4 +1,4 @@
-package main.java.com.excilys.computerdb.dao;
+package com.excilys.computerdb.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -7,8 +7,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import main.java.com.excilys.computerdb.beans.Company;
-import main.java.com.excilys.computerdb.exception.DAOException;
+import com.excilys.computerdb.beans.Company;
+import com.excilys.computerdb.exception.DAOException;
 
 // TODO: Auto-generated Javadoc
 /**

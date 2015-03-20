@@ -1,4 +1,4 @@
-package main.java.com.excilys.computerdb.beans;
+package com.excilys.computerdb.beans;
 
 import org.joda.time.LocalDate;
 

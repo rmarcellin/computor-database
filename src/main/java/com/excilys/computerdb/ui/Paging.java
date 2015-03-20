@@ -1,11 +1,11 @@
-package main.java.com.excilys.computerdb.ui;
+package com.excilys.computerdb.ui;
 
 /*import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.List;
 import java.util.Scanner;
 
-import main.java.com.excilys.computerdb.beans.Computer;*/
+import com.excilys.computerdb.beans.Computer;*/
 
 
 

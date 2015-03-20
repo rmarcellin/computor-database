@@ -1,4 +1,4 @@
-package main.java.com.excilys.computerdb.dao;
+package com.excilys.computerdb.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -9,10 +9,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import main.java.com.excilys.computerdb.beans.Computer;
-import main.java.com.excilys.computerdb.exception.DAOException;
-import main.java.com.excilys.computerdb.mapper.ComputerMapper;
-import main.java.com.excilys.computerdb.utils.Util;
+import com.excilys.computerdb.beans.Computer;
+import com.excilys.computerdb.exception.DAOException;
+import com.excilys.computerdb.mapper.ComputerMapper;
+import com.excilys.computerdb.utils.Util;
 
 import org.joda.time.LocalDate;
 

@@ -1,4 +1,4 @@
-package main.java.com.excilys.computerdb.exception;
+package com.excilys.computerdb.exception;
 
 @SuppressWarnings("serial")
 public class DAOConfException extends RuntimeException {

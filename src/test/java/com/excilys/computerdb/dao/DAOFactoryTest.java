@@ -1,8 +1,8 @@
-package test.java.com.excilys.computerdb.dao;
+package com.excilys.computerdb.dao;
 
 import static org.junit.Assert.assertNotNull;
 
-import main.java.com.excilys.computerdb.dao.DAOFactory;
+import com.excilys.computerdb.dao.DAOFactory;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

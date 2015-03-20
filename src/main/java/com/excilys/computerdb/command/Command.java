@@ -1,10 +1,10 @@
-package main.java.com.excilys.computerdb.command;
+package com.excilys.computerdb.command;
 
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
-import main.java.com.excilys.computerdb.dao.DAOFactory;
+import com.excilys.computerdb.dao.DAOFactory;
 
 
 public enum Command {

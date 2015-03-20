@@ -1,7 +1,7 @@
 /**
  * 
  */
-package main.java.com.excilys.computerdb.dao;
+package com.excilys.computerdb.dao;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,7 +10,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
-import main.java.com.excilys.computerdb.exception.DAOConfException;
+import com.excilys.computerdb.exception.DAOConfException;
 
 
 // TODO: Auto-generated Javadoc
