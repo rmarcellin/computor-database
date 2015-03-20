@@ -1,6 +1,7 @@
 package com.excilys.computerdb.ui;
 
 import java.sql.SQLException;
+import com.excilys.computerdb.services.ComputerService;
 
 
 
@@ -25,7 +26,8 @@ public class Main {
 		System.out.println("|    /!\\ Pour les étapes 4, 5, et 6, suivez les instructions    |");
 		System.out.println("+---------------------------------------------------------------+");
 		
-		
+		ComputerService cs = new ComputerService();
+		System.out.println(cs.getComputers());
 		
 	}
 

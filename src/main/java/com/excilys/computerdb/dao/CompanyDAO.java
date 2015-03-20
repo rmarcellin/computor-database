@@ -65,5 +65,11 @@ public class CompanyDAO {
 		
 		return companies;
 	}
+	
+	public Company getCompanyById(long id) {
+		Company company = null;
+
+		return company;
+	}
 
 }

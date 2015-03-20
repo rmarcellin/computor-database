@@ -24,6 +24,8 @@ public class Computer {
 	/** The company id. */
 	private long companyId;
 	
+	private String companyName;
+	
 	/**
 	 * Instantiates a new computer.
 	 */
@@ -45,6 +47,7 @@ public class Computer {
 		this.introduced = introduced;
 		this.discontinued = discontinued;
 		this.companyId = companyId;
+		this.companyName = "";
 	}
 
 	/**
@@ -91,6 +94,10 @@ public class Computer {
 	public long getCompanyId() {
 		return companyId;
 	}
+	
+	public String getCompanyName() {
+		return companyName;
+	}
 
 	/**
 	 * Sets the id.
@@ -136,6 +143,10 @@ public class Computer {
 	public void setCompanyId(long companyId) {
 		this.companyId = companyId;
 	}
+	
+	public void setCompanyName(String name) {
+		this.companyName = name;
+	}
 
 	/* (non-Javadoc)
 	 * @see java.lang.Object#hashCode()
@@ -161,7 +172,7 @@ public class Computer {
 		return "[id = " + id + ", "
 				+ (name != null ? "Computer : " + name + ", " : "") 
 				+ " introduced : " + introduced + ", discontinued : " 
-				+ discontinued + ", company_id : " + companyId + "]";
+				+ discontinued + ", company : " + companyName + "]";
 	}	 
 	 	
 
