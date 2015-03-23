@@ -13,7 +13,7 @@ public class Main {
 		//CompanyDAO companyDAO = rep.getCompanyDAO();
 		//ComputerDAO computerDAO = rep.getComputerDAO();
 		//List<Computer> listComputer = computerDAO.getComputers();
-		//Paging paging = new Paging(listComputer);
+		//Page paging = new Page(listComputer);
 		
 		System.out.println("+---------------------------------------------------------------+");
 		System.out.println("|     Pour interagir avec le CL-UI, suivez les instructions     |");

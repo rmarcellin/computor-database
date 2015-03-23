@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.excilys.computerdb.beans.Computer;
 import com.excilys.computerdb.services.ComputerService;
+import com.excilys.computerdb.ui.Page;
 
 /**
  * Servlet implementation class AllComputers
@@ -44,7 +45,17 @@ public class AllComputers extends HttpServlet {
 			//e.printStackTrace();
 			ctx.getRequestDispatcher("/WEB-INF/views/404.html").forward( request, response );
 		}
-		request.setAttribute("computers", computers);		
+		int defaultPageNum = 1;
+		int defaultPageNumFooter = 1;
+		String pageNumStr = request.getParameter("pageNum");
+		String pageNumFooterStr = request.getParameter("startP");
+		if (pageNumStr != null) {
+			defaultPageNum = Integer.parseInt(pageNumStr);
+			defaultPageNumFooter = Integer.parseInt(pageNumFooterStr);
+		}
+		
+		Page<Computer> page = new Page<Computer>(computers, defaultPageNum, defaultPageNumFooter);
+		request.setAttribute("page", page);		
 		ctx.getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward( request, response );		
 	}
 

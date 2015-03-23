@@ -26,7 +26,7 @@
     <section id="main">
         <div class="container">
             <h1 id="homeTitle">
-                ${fn:length(computers)} Computers found
+                <c:out value="${ page.size }" /> Computers found
             </h1>
             <div id="actions" class="form-horizontal">
                 <div class="pull-left">
@@ -82,8 +82,8 @@
                 </thead>
                 <!-- Browse attribute computers -->
                 <tbody id="results">
-                
-                	<c:forEach var="computer" items="${ computers }">                	
+                    
+                	<c:forEach var="computer" items="${ page.pageElements }">                	
 	                    <tr>
 	                        <td class="editMode">
 	                            <input type="checkbox" name="cb" class="cb" value="0">
@@ -106,22 +106,23 @@
     </section>
 
     <footer class="navbar-fixed-bottom">
-        <div class="container text-center">
+        <div class="container text-center">        	
             <ul class="pagination">
                 <li>
-                    <a href="#" aria-label="Previous">
+                <c:url var="pageFooterLeft" value="/AllComputers?pageNum=${ page.page }&startP=${ page.pageStart }" />
+                    <a href="${ pageFooterLeft }" aria-label="Previous">
                       <span aria-hidden="true">&laquo;</span>
                   </a>
               </li>
-              <li><a href="#">1</a></li>
-              <li><a href="#">2</a></li>
-              <li><a href="#">3</a></li>
-              <li><a href="#">4</a></li>
-              <li><a href="#">5</a></li>
+              <c:forEach var="pageNbr" begin="${ page.pageStart }" end="${ page.pageEnd }" step="1">  
+              		<c:url var="urlNum" value="/AllComputers?pageNum=${ pageNbr }&startP=${ page.pageStart }" />
+              		<li><a href="${ urlNum }"> <c:out value="${ pageNbr }" /> </a></li>          
+              </c:forEach>
               <li>
-	                <a href="#" aria-label="Next">
-	                    <span aria-hidden="true">&raquo;</span>
-	                </a>
+              	<c:url var="pageFooterRight" value="/AllComputers?pageNum=${ page.page }&startP=${ page.nextPage }" />
+                <a href="${ pageFooterRight }" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
             	</li>
         	</ul>
 		</div>
