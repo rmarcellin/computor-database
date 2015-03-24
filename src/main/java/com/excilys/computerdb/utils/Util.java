@@ -12,6 +12,8 @@ import java.util.regex.Pattern;
 
 import org.joda.time.LocalDate;
 
+import com.excilys.computerdb.beans.Computer;
+import com.excilys.computerdb.dto.ComputerDTO;
 import com.excilys.computerdb.exception.DAOException;
 
 // TODO: Auto-generated Javadoc
@@ -74,7 +76,7 @@ public class Util {
 		return localDate;
 	}
 
-	public static LocalDate poduceLocalDateFromString(String localDate) {
+	public static LocalDate produceLocalDateFromString(String localDate) {
 		if (localDate == null) {
 			throw new IllegalArgumentException();
 		}
@@ -149,6 +151,29 @@ public class Util {
 		}
 
 		return companyName;
+	}
+	
+	public static Computer fromDTOToComputer(ComputerDTO computer) {
+		Computer comp = new Computer();
+		comp.setName(computer.getName());
+		comp.setIntroduced(Util.produceLocalDateFromString(computer
+				.getIntroduced()));
+		comp.setDiscontinued(Util.produceLocalDateFromString(computer
+				.getDiscontinued()));
+		comp.setCompanyId(computer.getCompanyId());
+		comp.setCompanyName(computer.getCompanyName());
+		return comp;
+	}
+	
+	public static ComputerDTO fromComputerToDTO (Computer computer) {
+		ComputerDTO comp = new ComputerDTO();
+		comp.setName(computer.getName());
+		String str = computer.getIntroduced().toString();
+		comp.setIntroduced(str != null ? str : "");
+		comp.setDiscontinued(computer.getDiscontinued().toString());
+		comp.setCompanyId(computer.getCompanyId());
+		comp.setCompanyName(computer.getCompanyName());
+		return comp;
 	}
 
 }

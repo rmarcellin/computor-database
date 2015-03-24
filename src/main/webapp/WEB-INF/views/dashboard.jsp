@@ -38,7 +38,8 @@
                     </form>
                 </div>
                 <div class="pull-right">
-                    <a class="btn btn-success" id="addComputer" href="addComputer.html">Add Computer</a> 
+                	<c:url var="addComputer" value="/AddComputer" />
+                    <a class="btn btn-success" id="addComputer" href="${ addComputer }">Add Computer</a> 
                     <a class="btn btn-default" id="editComputer" href="#" onclick="$.fn.toggleEditMode();">Edit</a>
                 </div>
             </div>
@@ -109,20 +110,32 @@
         <div class="container text-center">        	
             <ul class="pagination">
                 <li>
-                <c:url var="pageFooterLeft" value="/AllComputers?pageNum=${ page.page }&startP=${ page.pageStart }" />
+                	<c:url var="pageFooterLeft" value="/AllComputers?pageNum=${ page.page }&startP=${ page.previousPage }" />
                     <a href="${ pageFooterLeft }" aria-label="Previous">
                       <span aria-hidden="true">&laquo;</span>
                   </a>
               </li>
-              <c:forEach var="pageNbr" begin="${ page.pageStart }" end="${ page.pageEnd }" step="1">  
-              		<c:url var="urlNum" value="/AllComputers?pageNum=${ pageNbr }&startP=${ page.pageStart }" />
-              		<li><a href="${ urlNum }"> <c:out value="${ pageNbr }" /> </a></li>          
-              </c:forEach>
+              <c:choose>
+	              <c:when test="${ page.pageStart <= page.nextPage}">
+		              <c:forEach var="pageNbr" begin="${ page.pageStart }" end="${ page.nextPage }" step="1">  
+		              		<c:url var="urlNum" value="/AllComputers?pageNum=${ pageNbr }&startP=${ page.pageStart }" />
+		              		<li><a href="${ urlNum }"> <c:out value="${ pageNbr }" /> </a></li>          
+		              </c:forEach>
+	              </c:when>
+	              <c:otherwise>		<!-- In this case, we are at the end of the page footer  -->
+	              	<!-- From pageStart to the last pagefooter -->	           
+	              	<c:forEach var="pageNbr" begin="${ page.pageStart }" end="${ page.pageNumbers }" step="1">  
+	              		<c:url var="urlNum" value="/AllComputers?pageNum=${ pageNbr }&startP=${ page.pageStart }" />
+	              		<li><a href="${ urlNum }"> <c:out value="${ pageNbr }" /> </a></li>          
+		            </c:forEach>		           		            
+	              </c:otherwise>
+	              
+              </c:choose>
               <li>
               	<c:url var="pageFooterRight" value="/AllComputers?pageNum=${ page.page }&startP=${ page.nextPage }" />
-                <a href="${ pageFooterRight }" aria-label="Next">
-                    <span aria-hidden="true">&raquo;</span>
-                </a>
+              	<a href="${ pageFooterRight }" aria-label="Next">
+                   	<span aria-hidden="true">&raquo;</span>
+               	</a>
             	</li>
         	</ul>
 		</div>
@@ -133,9 +146,9 @@
         </div>
 
     </footer>
-<script src="../js/jquery.min.js"></script>
-<script src="../js/bootstrap.min.js"></script>
-<script src="../js/dashboard.js"></script>
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/dashboard.js"></script>
 
 </body>
 </html>

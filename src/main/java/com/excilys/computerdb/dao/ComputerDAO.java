@@ -123,7 +123,7 @@ public class ComputerDAO {
 
 			// instroduction date
 			String introStr = values.get("introduced");
-			LocalDate introduced = Util.poduceLocalDateFromString(introStr);
+			LocalDate introduced = Util.produceLocalDateFromString(introStr);
 			updatedComp.setIntroduced(introduced);
 			preparedStatement
 					.setTimestamp(2, Util.getTimeStampFromLocalDate(updatedComp
@@ -131,7 +131,7 @@ public class ComputerDAO {
 
 			// discontinued date
 			String discoStr = values.get("discontinued");
-			LocalDate discontinued = Util.poduceLocalDateFromString(discoStr);
+			LocalDate discontinued = Util.produceLocalDateFromString(discoStr);
 			updatedComp.setDiscontinued(discontinued);
 			preparedStatement.setTimestamp(3, Util
 					.getTimeStampFromLocalDate(updatedComp.getDiscontinued()));
@@ -221,7 +221,7 @@ public class ComputerDAO {
 			preparedStatement.setLong(1, new Long(criteria));
 			resultSet = preparedStatement.executeQuery();
 			resultSet.next();
-			comp = new ComputerMapper().map(resultSet);
+			comp = new ComputerMapper().mapResultSet(resultSet);
 			companyName = Util.getCompanyNameById(comp.getCompanyId(),
 					connection);
 			comp.setCompanyName(companyName);
@@ -257,7 +257,7 @@ public class ComputerDAO {
 			preparedStatement.setString(1, name);
 			resultSet = preparedStatement.executeQuery();
 			resultSet.next();
-			comp = new ComputerMapper().map(resultSet);
+			comp = new ComputerMapper().mapResultSet(resultSet);
 			companyName = Util.getCompanyNameById(comp.getCompanyId(),
 					connection);
 			comp.setCompanyName(companyName);
@@ -292,7 +292,7 @@ public class ComputerDAO {
 
 			while (resultSet.next()) {
 				String companyName = "";
-				computer = new ComputerMapper().map(resultSet);
+				computer = new ComputerMapper().mapResultSet(resultSet);
 				long companyId = computer.getCompanyId();
 				if (companyId != 0) {
 					companyName = Util.getCompanyNameById(companyId, connection);

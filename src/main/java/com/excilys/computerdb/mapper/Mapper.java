@@ -12,6 +12,6 @@ public interface Mapper<Type> {
 	 * @return the object corresponding to the result set
 	 * @throws SQLException the SQL exception
 	 */
-	Type map(ResultSet resultSet) throws SQLException; 
+	Type mapResultSet(ResultSet resultSet) throws SQLException; 
 
 }

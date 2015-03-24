@@ -43,6 +43,9 @@ public class Page<Type> {
 	}
 	
 	public List<Type> getPageElements () {
+		if (supBorder > listSize) {
+			supBorder = listSize;
+		}
 		return listT.subList(infBorder, supBorder);
 	}
 	
@@ -70,8 +73,20 @@ public class Page<Type> {
 		return footerFirstNbr;
 	}
 	
+	public int getPreviousPage () {
+		int tmp = footerFirstNbr - FOOTER_PAGE_SIZE;
+		if (tmp <= 0) {
+			return 1;
+		}
+		return tmp;
+	}
+	
 	public int getNextPage() {
-		return (footerFirstNbr + FOOTER_PAGE_SIZE - 1) % pageNumbers;
+		int tmp = (footerFirstNbr + FOOTER_PAGE_SIZE - 1) % pageNumbers;
+		if( tmp == 0) {
+			return 1;
+		}
+		return tmp;
 	}
 	
 }
