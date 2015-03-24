@@ -168,9 +168,8 @@ public class Util {
 	public static ComputerDTO fromComputerToDTO (Computer computer) {
 		ComputerDTO comp = new ComputerDTO();
 		comp.setName(computer.getName());
-		String str = computer.getIntroduced().toString();
-		comp.setIntroduced(str != null ? str : "");
-		comp.setDiscontinued(computer.getDiscontinued().toString());
+		comp.setIntroduced(computer.getIntroduced());
+		comp.setDiscontinued(computer.getDiscontinued());
 		comp.setCompanyId(computer.getCompanyId());
 		comp.setCompanyName(computer.getCompanyName());
 		return comp;

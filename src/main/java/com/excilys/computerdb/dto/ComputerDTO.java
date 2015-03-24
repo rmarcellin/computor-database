@@ -1,5 +1,7 @@
 package com.excilys.computerdb.dto;
 
+import org.joda.time.LocalDate;
+
 public class ComputerDTO {
 	
 	private String name;
@@ -43,12 +45,20 @@ public class ComputerDTO {
 		this.name = name;
 	}
 
-	public void setIntroduced(String introduced) {
-		this.introduced = introduced;
+	public void setIntroduced(LocalDate introduced) {
+		String intro = "";
+		if (introduced != null) {
+			intro = introduced.toString();
+		}
+		this.introduced = intro;
 	}
 
-	public void setDiscontinued(String discontinued) {
-		this.discontinued = discontinued;
+	public void setDiscontinued(LocalDate discontinued) {
+		String disco = "";
+		if (discontinued != null) {
+			disco = discontinued.toString();
+		}
+		this.discontinued = disco;
 	}
 
 	public void setCompanyName (String companyName) {

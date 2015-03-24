@@ -45,10 +45,11 @@ public class AllComputers extends HttpServlet {
 		try {
 			computers = cs.getComputers();
 		} catch (SQLException e) {
-			// e.printStackTrace();
+			// At this point, a log will be done
 			ctx.getRequestDispatcher("/WEB-INF/views/404.html").forward(
 					request, response);
 		}
+		// At this point, the computers list is going to be converted to DTOs list
 		List<ComputerDTO> computersDTO = new ArrayList<ComputerDTO>();
 		for (Computer comp : computers) {
 			computersDTO.add(Util.fromComputerToDTO(comp));
