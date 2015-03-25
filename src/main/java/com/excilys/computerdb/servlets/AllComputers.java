@@ -63,20 +63,13 @@ public class AllComputers extends HttpServlet {
 			defaultPageNumFooter = Integer.parseInt(pageNumFooterStr);
 		}
 
+		// A page containing a list of computers is sent the user. The list will be
+		// shown
 		Page<ComputerDTO> page = new Page<ComputerDTO>(computersDTO,
 				defaultPageNum, defaultPageNumFooter);
 		request.setAttribute("page", page);
 		ctx.getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(
 				request, response);
-	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-	protected void doPost(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 	}
 
 }

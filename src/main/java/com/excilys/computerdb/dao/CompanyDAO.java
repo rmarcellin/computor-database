@@ -8,7 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.excilys.computerdb.beans.Company;
+import com.excilys.computerdb.mapper.CompanyMapper;
 import com.excilys.computerdb.exception.DAOException;
+import com.excilys.computerdb.utils.Util;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -21,6 +23,7 @@ public class CompanyDAO {
 	
 	/** The Constant SQL_SELECT_ALL_COMPANIES. */
 	private static final String SQL_SELECT_ALL_COMPANIES = "SELECT * FROM company";
+	private static final String SQL_SELECT_BY_NAME = "SELECT * FROM company WHERE name = ?";
 
 	/**
 	 * Instantiates a new company dao.
@@ -29,6 +32,27 @@ public class CompanyDAO {
 	 */
 	public CompanyDAO(DAOFactory daoFactory) {
 		this.repository = daoFactory;
+	}
+	
+	public long getCompanyIdByName (String name) throws SQLException {
+		ResultSet resultSet = null;
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+		long id;
+		try {
+			connection = repository.getConnection();
+			preparedStatement = connection.prepareStatement(SQL_SELECT_BY_NAME);
+			preparedStatement.setString(1, name);
+			resultSet = preparedStatement.executeQuery();
+			resultSet.next();
+			id = new CompanyMapper().mapResultSet(resultSet).getId();			
+		} catch (SQLException e) {
+			throw new DAOException(e);
+		} finally {
+			Util.closeRessources(connection, preparedStatement, resultSet);
+		}
+		
+		return id;
 	}
 	
 	/**
@@ -59,8 +83,7 @@ public class CompanyDAO {
 		} catch (SQLException e) {
 			throw new DAOException(e);
 		} finally {
-			connection.close();
-			preparedStatement.close();
+			Util.closeRessources(connection, preparedStatement, resultSet);
 		}
 		
 		return companies;
@@ -71,5 +94,4 @@ public class CompanyDAO {
 
 		return company;
 	}
-
 }

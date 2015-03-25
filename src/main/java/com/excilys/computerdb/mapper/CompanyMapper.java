@@ -7,7 +7,6 @@ import com.excilys.computerdb.beans.Company;
 
 public class CompanyMapper implements Mapper<Company> {
 
-	@Override
 	public Company mapResultSet(ResultSet resultSet) throws SQLException {
 		if (resultSet == null) {
 			throw new IllegalArgumentException();

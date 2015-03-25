@@ -12,7 +12,8 @@ import java.util.regex.Pattern;
 
 import org.joda.time.LocalDate;
 
-import com.excilys.computerdb.beans.Computer;
+import com.excilys.computerdb.beans.*;
+import com.excilys.computerdb.dto.CompanyDTO;
 import com.excilys.computerdb.dto.ComputerDTO;
 import com.excilys.computerdb.exception.DAOException;
 
@@ -75,13 +76,13 @@ public class Util {
 		LocalDate localDate = new LocalDate(timestampLong);
 		return localDate;
 	}
-
+	
 	public static LocalDate produceLocalDateFromString(String localDate) {
+		final LocalDate ld = new LocalDate();
 		if (localDate == null) {
-			throw new IllegalArgumentException();
+			return ld;
 		}
 		String[] str = localDate.split("-");
-		final LocalDate ld = new LocalDate();
 		ld.withYear(Integer.parseInt(str[0]));
 		ld.withMonthOfYear(Integer.parseInt(str[1]));
 		ld.withDayOfMonth(Integer.parseInt(str[2]));
@@ -168,11 +169,22 @@ public class Util {
 	public static ComputerDTO fromComputerToDTO (Computer computer) {
 		ComputerDTO comp = new ComputerDTO();
 		comp.setName(computer.getName());
-		comp.setIntroduced(computer.getIntroduced());
-		comp.setDiscontinued(computer.getDiscontinued());
+		if (computer.getIntroduced() == null) {
+			comp.setIntroduced("");
+		} else {
+			comp.setIntroduced(computer.getIntroduced().toString());
+		}
+		if (computer.getDiscontinued() == null) {
+			comp.setDiscontinued("");
+		} else {
+			comp.setDiscontinued(computer.getDiscontinued().toString());
+		}		
 		comp.setCompanyId(computer.getCompanyId());
 		comp.setCompanyName(computer.getCompanyName());
 		return comp;
 	}
 
+	public static CompanyDTO fromCompanyToDTO (Company company) {	
+		return new CompanyDTO(company.getId(), company.getName());
+	}
 }

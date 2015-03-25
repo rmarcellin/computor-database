@@ -16,7 +16,7 @@ public class CompanyService {
 		companyDAO = new CompanyDAO(factory);
 	}
 	
-	public List<Company> getComputers() throws SQLException {
+	public List<Company> getCompanies() throws SQLException {
 		return companyDAO.getCompanies();
 	}
 

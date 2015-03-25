@@ -23,7 +23,7 @@ import org.joda.time.LocalDate;
 public class ComputerDAO {
 
 	/** The repository. */
-	private DAOFactory repository;
+	private DAOFactory daoFactory;
 
 	/** The Constant SQL_SELECT_ALL_COMPUTERS. */
 	private static final String SQL_SELECT_ALL_COMPUTERS = "SELECT * FROM computer";
@@ -53,7 +53,7 @@ public class ComputerDAO {
 	 */
 	public ComputerDAO(DAOFactory daoFactory) {
 		// TODO Auto-generated constructor stub
-		this.repository = daoFactory;
+		this.daoFactory = daoFactory;
 	}
 
 	/**
@@ -71,7 +71,7 @@ public class ComputerDAO {
 		Computer deletedComp = this.getComputerById(compId);
 
 		try {
-			connection = repository.getConnection();
+			connection = daoFactory.getConnection();
 			preparedStatement = connection
 					.prepareStatement(SQL_DELETE_COMPUTER);
 
@@ -110,7 +110,7 @@ public class ComputerDAO {
 		PreparedStatement preparedStatement = null;
 
 		try {
-			connection = repository.getConnection();
+			connection = daoFactory.getConnection();
 			preparedStatement = connection
 					.prepareStatement(SQL_UPDATE_COMPUTER);
 
@@ -170,7 +170,7 @@ public class ComputerDAO {
 		PreparedStatement preparedStatement = null;
 
 		try {
-			connection = repository.getConnection();
+			connection = daoFactory.getConnection();
 			preparedStatement = connection
 					.prepareStatement(SQL_CREATE_COMPUTER);
 			preparedStatement.setString(1, comp.getName());
@@ -215,7 +215,7 @@ public class ComputerDAO {
 		String companyName = "";
 
 		try {
-			connection = repository.getConnection();
+			connection = daoFactory.getConnection();
 			preparedStatement = connection
 					.prepareStatement(SQL_SELECT_ONE_COMPUTER_BY_ID);
 			preparedStatement.setLong(1, new Long(criteria));
@@ -251,7 +251,7 @@ public class ComputerDAO {
 		String companyName = null;
 
 		try {
-			connection = repository.getConnection();
+			connection = daoFactory.getConnection();
 			preparedStatement = connection
 					.prepareStatement(SQL_SELECT_ONE_COMPUTER_BY_NAME);
 			preparedStatement.setString(1, name);
@@ -285,7 +285,7 @@ public class ComputerDAO {
 		PreparedStatement preparedStatement = null;
 
 		try {
-			connection = repository.getConnection();
+			connection = daoFactory.getConnection();
 			preparedStatement = connection
 					.prepareStatement(SQL_SELECT_ALL_COMPUTERS);
 			resultSet = preparedStatement.executeQuery();
@@ -295,7 +295,8 @@ public class ComputerDAO {
 				computer = new ComputerMapper().mapResultSet(resultSet);
 				long companyId = computer.getCompanyId();
 				if (companyId != 0) {
-					companyName = Util.getCompanyNameById(companyId, connection);
+					companyName = Util
+							.getCompanyNameById(companyId, connection);
 					computer.setCompanyName(companyName);
 				}
 				listComp.add(computer);
