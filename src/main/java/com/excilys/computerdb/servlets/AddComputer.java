@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.excilys.computerdb.dto.*;
 import com.excilys.computerdb.services.*;
 import com.excilys.computerdb.utils.Util;
+import com.excilys.computerdb.validators.ComputerValidator;
 import com.excilys.computerdb.beans.*;
 
 /**
@@ -77,16 +78,22 @@ public class AddComputer extends HttpServlet {
 		// Fabricating a computer service which is going to add the computer
 		// to the database using a computerDAO
 		Computer computer = Util.fromDTOToComputer(computerDTO);
-		ComputerService compService = new ComputerService();
-		try {
-			compService.setComputer(computer);
-		} catch (SQLException e) {
-			// TODO Add to log and then throw a 404 http error
-			this.getServletContext()
-					.getRequestDispatcher("/WEB-INF/views/404.html")
-					.forward(request, response);
+		if (ComputerValidator.isValide(computer)) {
+			ComputerService compService = new ComputerService();
+			try {
+				compService.setComputer(computer);
+			} catch (SQLException e) {
+				// TODO Add to log and then throw a 404 http error
+				this.getServletContext()
+						.getRequestDispatcher("/WEB-INF/views/404.html")
+						.forward(request, response);
+			}
+			response.sendRedirect("AllComputers");
+		} else {
+			// TODO Log the error
+			this.getServletContext().getRequestDispatcher("/WEB-INF/views/404.html").forward(request, response);
 		}
-		response.sendRedirect("AllComputers");
+		
 	}
 
 }

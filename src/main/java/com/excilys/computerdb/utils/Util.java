@@ -90,7 +90,7 @@ public class Util {
 		return ld;
 	}
 
-	public static boolean dateValidator(String dateStr) {
+	public static boolean isDateValid(String dateStr) {
 		Pattern patern = Pattern
 				.compile("^\\d{4}[-]?\\d{1,2}[-]?\\d{1,2} \\d{1,2}:\\d{1,2}:\\d{1,2}");
 		return patern.matcher(dateStr).matches();
