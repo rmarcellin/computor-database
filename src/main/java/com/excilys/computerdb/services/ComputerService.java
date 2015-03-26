@@ -36,5 +36,9 @@ public class ComputerService {
 	public void deleteComputer(Computer computer) throws SQLException {
 		computerDAO.deleteComputer(computer.getId());
 	}
+	
+	public void updateComputer(Computer computer) throws SQLException {
+		computerDAO.updateComputer(computer);
+	}
 
 }

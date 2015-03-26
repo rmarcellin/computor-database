@@ -17,10 +17,11 @@
 <body>
 
 	<c:set scope="session" var="computers" value="" />
-
+	<c:url var="thisPage" value="/AllComputers" />
+	
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href="dashboard.html"> Application -
+			<a class="navbar-brand" href="${ thisPage }"> Application -
 				Computer Database </a>
 		</div>
 	</header>
@@ -84,9 +85,20 @@
 						<tr>
 							<td class="editMode"><input type="checkbox" name="cb"
 								class="cb" value="0"></td>
-							<td><a href="editComputer.html" onclick=""> <c:out
-										value="${ computer.name }" />
-							</a></td>
+							<td>
+								
+								<c:url var="editComputer" 
+										value="/EditComputer?
+												id=${ computer.id }
+												&name=${ computer.name }
+												&intro=${ computer.introduced }
+												&disco=${ computer.discontinued }
+												&companyName=${ computer.companyName }
+										" />
+								<a href="${ editComputer }" onclick=""> 
+									<c:out value="${ computer.name }" />
+								</a>
+							</td>
 							<td><c:out value="${ computer.introduced }" /></td>
 							<td><c:out value="${ computer.discontinued }" /></td>
 							<td><c:out value="${ computer.companyName }" /></td>

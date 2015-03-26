@@ -7,14 +7,10 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-
 import com.excilys.computerdb.beans.Computer;
 import com.excilys.computerdb.exception.DAOException;
 import com.excilys.computerdb.mapper.ComputerMapper;
 import com.excilys.computerdb.utils.Util;
-
-import org.joda.time.LocalDate;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -103,9 +99,7 @@ public class ComputerDAO {
 	 * @throws SQLException
 	 *             the SQL exception
 	 */
-	public Computer updateComputer(long compId, Map<String, String> values)
-			throws SQLException {
-		Computer updatedComp = new Computer();
+	public void updateComputer(Computer computer) throws SQLException {
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 
@@ -114,38 +108,19 @@ public class ComputerDAO {
 			preparedStatement = connection
 					.prepareStatement(SQL_UPDATE_COMPUTER);
 
-			// id
-			updatedComp.setId(compId);
-
-			// name
-			updatedComp.setName(values.get("name"));
-			preparedStatement.setString(1, updatedComp.getName());
-
-			// instroduction date
-			String introStr = values.get("introduced");
-			LocalDate introduced = Util.produceLocalDateFromString(introStr);
-			updatedComp.setIntroduced(introduced);
-			preparedStatement
-					.setTimestamp(2, Util.getTimeStampFromLocalDate(updatedComp
-							.getIntroduced()));
-
-			// discontinued date
-			String discoStr = values.get("discontinued");
-			LocalDate discontinued = Util.produceLocalDateFromString(discoStr);
-			updatedComp.setDiscontinued(discontinued);
-			preparedStatement.setTimestamp(3, Util
-					.getTimeStampFromLocalDate(updatedComp.getDiscontinued()));
-
-			// companyId
-			updatedComp.setCompanyId(Long.parseLong(values.get("companyId")));
-			preparedStatement.setLong(4, updatedComp.getCompanyId());
-
-			preparedStatement.setLong(5, new Long(compId));
+			// UPDATING
+			preparedStatement.setString(1, computer.getName());
+			preparedStatement.setTimestamp(2,
+					Util.getTimeStampFromLocalDate(computer.getIntroduced()));
+			preparedStatement.setTimestamp(3,
+					Util.getTimeStampFromLocalDate(computer.getDiscontinued()));
+			preparedStatement.setLong(4, computer.getCompanyId());
+			preparedStatement.setLong(5, computer.getId());
 
 			int status = preparedStatement.executeUpdate();
 			if (status == 0) {
-				throw new DAOException("Failed to update the computer : "
-						+ updatedComp.getName());
+				throw new DAOException("Failed to update computer : "
+						+ computer);
 			}
 
 		} catch (SQLException e) {
@@ -153,8 +128,6 @@ public class ComputerDAO {
 		} finally {
 			Util.closeRessources(connection, preparedStatement, null);
 		}
-
-		return updatedComp;
 	}
 
 	/**
@@ -173,6 +146,9 @@ public class ComputerDAO {
 			connection = daoFactory.getConnection();
 			preparedStatement = connection
 					.prepareStatement(SQL_CREATE_COMPUTER);
+			if (comp.getName() == null) {
+				throw new DAOException("Computer name should not be empty ");
+			}
 			preparedStatement.setString(1, comp.getName());
 
 			Timestamp introduced = Util.getTimeStampFromLocalDate(comp

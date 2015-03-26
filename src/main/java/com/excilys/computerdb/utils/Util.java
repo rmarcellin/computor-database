@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.joda.time.LocalDate;
 
 import com.excilys.computerdb.beans.*;
@@ -76,18 +78,18 @@ public class Util {
 		LocalDate localDate = new LocalDate(timestampLong);
 		return localDate;
 	}
-	
-	public static LocalDate produceLocalDateFromString(String localDate) {
-		final LocalDate ld = new LocalDate();
-		if (localDate == null) {
-			return ld;
-		}
-		String[] str = localDate.split("-");
-		ld.withYear(Integer.parseInt(str[0]));
-		ld.withMonthOfYear(Integer.parseInt(str[1]));
-		ld.withDayOfMonth(Integer.parseInt(str[2]));
 
-		return ld;
+	public static LocalDate produceLocalDateFromString(String localDate) {
+		if (localDate == null) {
+			return null;
+		}
+				
+		String[] str = localDate.split("-");
+		int year = Integer.parseInt(str[0]);
+		int month = Integer.parseInt(str[1]);
+		int day = Integer.parseInt(str[2]);
+		
+		return new LocalDate(year, month, day);
 	}
 
 	public static boolean isDateValid(String dateStr) {
@@ -153,9 +155,12 @@ public class Util {
 
 		return companyName;
 	}
-	
+
 	public static Computer fromDTOToComputer(ComputerDTO computer) {
 		Computer comp = new Computer();
+		if (computer.getId() != 0) {
+			comp.setId(computer.getId());
+		}
 		comp.setName(computer.getName());
 		comp.setIntroduced(Util.produceLocalDateFromString(computer
 				.getIntroduced()));
@@ -165,9 +170,10 @@ public class Util {
 		comp.setCompanyName(computer.getCompanyName());
 		return comp;
 	}
-	
-	public static ComputerDTO fromComputerToDTO (Computer computer) {
+
+	public static ComputerDTO fromComputerToDTO(Computer computer) {
 		ComputerDTO comp = new ComputerDTO();
+		comp.setId(computer.getId());
 		comp.setName(computer.getName());
 		if (computer.getIntroduced() == null) {
 			comp.setIntroduced("");
@@ -178,13 +184,28 @@ public class Util {
 			comp.setDiscontinued("");
 		} else {
 			comp.setDiscontinued(computer.getDiscontinued().toString());
-		}		
+		}
 		comp.setCompanyId(computer.getCompanyId());
 		comp.setCompanyName(computer.getCompanyName());
 		return comp;
 	}
 
-	public static CompanyDTO fromCompanyToDTO (Company company) {	
+	public static CompanyDTO fromCompanyToDTO(Company company) {
 		return new CompanyDTO(company.getId(), company.getName());
+	}
+
+	public static ComputerDTO getComputerDTOFromHttpServlet(
+			HttpServletRequest request) {
+		ComputerDTO computerDTO = new ComputerDTO();
+		String compId = request.getParameter("id");
+		if (compId != null) {
+			computerDTO.setId(Long.parseLong(compId));
+		}
+		computerDTO.setName(request.getParameter("computerName"));
+		computerDTO.setIntroduced(request.getParameter("introduced"));
+		computerDTO.setDiscontinued(request.getParameter("discontinued"));
+		computerDTO.setCompanyId(Long.parseLong(request.getParameter("companyId")));
+
+		return computerDTO;
 	}
 }

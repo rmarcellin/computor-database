@@ -6,12 +6,12 @@ import java.util.List;
 
 import org.joda.time.LocalDate;
 
-import com.excilys.computerdb.beans.*;
+import com.excilys.computerdb.dto.ComputerDTO;
 import com.excilys.computerdb.utils.*;
 
 public class ComputerValidator {
 
-	public static boolean isValide(Computer computer) {
+	public static boolean isValide(ComputerDTO computer) {
 		// TODO Log errors
 
 		// COMPUTER NAME
@@ -28,13 +28,13 @@ public class ComputerValidator {
 			return false;
 		}
 
-		if (computer.getName().matches("[^\\<$>&^:=]*")) {
-			return false;
-		}
-
 		// COMPUTER INTRODUCED
 		if (computer.getIntroduced() != null) {
-			LocalDate intro = computer.getIntroduced();
+			String introDate = computer.getIntroduced();
+			if (!Util.isDateValid(introDate + " 00:00:00")) {
+				return false;
+			}			
+			LocalDate intro = Util.produceLocalDateFromString(introDate);
 			if (!isValideMonth(intro)) {
 				return false;
 			}
@@ -42,7 +42,11 @@ public class ComputerValidator {
 
 		// COMPUTER DISCONINUED
 		if (computer.getDiscontinued() != null) {
-			LocalDate dico = computer.getDiscontinued();
+			String discoDate = computer.getIntroduced();
+			if (!Util.isDateValid(discoDate + " 00:00:00")) {
+				return false;
+			}
+			LocalDate dico = Util.produceLocalDateFromString(discoDate);
 			if (!isValideMonth(dico)) {
 				return false;
 			}
@@ -52,9 +56,6 @@ public class ComputerValidator {
 	}
 
 	private static boolean isValideMonth(LocalDate ld) {
-		if (!Util.isDateValid(ld.toString())) {
-			return false;
-		}
 		List<Integer> months30 = new ArrayList<Integer>(Arrays.asList(4, 6, 9,
 				11));
 		if (months30.contains(ld.getMonthOfYear()) && ld.getDayOfMonth() > 30) {
@@ -65,13 +66,15 @@ public class ComputerValidator {
 		if (months31.contains(ld.getMonthOfYear()) && ld.getDayOfMonth() > 31) {
 			return false;
 		}
-		int year = ld.getYear();
-		if (year % 4 != 0) {
-			if (year % 100 != 0) {
-				return false;
-			} else {
-				if (year % 400 != 0) {
+		if (ld.getDayOfMonth() == 2) {
+			int year = ld.getYear();
+			if (year % 4 != 0) {
+				if (year % 100 != 0) {
 					return false;
+				} else {
+					if (year % 400 != 0) {
+						return false;
+					}
 				}
 			}
 		}

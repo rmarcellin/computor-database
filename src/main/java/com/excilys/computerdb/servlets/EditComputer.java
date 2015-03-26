@@ -12,23 +12,25 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.excilys.computerdb.dto.*;
+import com.excilys.computerdb.beans.Company;
+import com.excilys.computerdb.beans.Computer;
+import com.excilys.computerdb.dto.CompanyDTO;
+import com.excilys.computerdb.dto.ComputerDTO;
 import com.excilys.computerdb.services.*;
 import com.excilys.computerdb.utils.Util;
 import com.excilys.computerdb.validators.ComputerValidator;
-import com.excilys.computerdb.beans.*;
 
 /**
- * Servlet implementation class AddComputer
+ * Servlet implementation class EditComputer
  */
-@WebServlet(description = "Adds a computer into database", urlPatterns = { "/AddComputer" })
-public class AddComputer extends HttpServlet {
+@WebServlet("/EditComputer")
+public class EditComputer extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public AddComputer() {
+	public EditComputer() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -39,7 +41,10 @@ public class AddComputer extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
+		// TODO Validate before saving computer into database
+		// TODO Log errors if there any problem
 		ServletContext scxt = this.getServletContext();
+
 		// In the form, the user will have a dropdown list of all the companies
 		// present in the database
 		CompanyService cs = new CompanyService();
@@ -56,7 +61,21 @@ public class AddComputer extends HttpServlet {
 			companiesDTO.add(Util.fromCompanyToDTO(comp));
 		}
 		request.setAttribute("companies", companiesDTO);
-		scxt.getRequestDispatcher("/WEB-INF/views/addComputer.jsp").forward(
+
+		// /////////////////////////////
+		String id = request.getParameter("id");
+		String name = request.getParameter("name");
+		String intro = request.getParameter("intro");
+		String disco = request.getParameter("disco");
+		String companyN = request.getParameter("companyName");
+
+		request.setAttribute("id", id);
+		request.setAttribute("name", name);
+		request.setAttribute("intro", intro);
+		request.setAttribute("disco", disco);
+		request.setAttribute("companyName", companyN);
+
+		scxt.getRequestDispatcher("/WEB-INF/views/editComputer.jsp").forward(
 				request, response);
 	}
 
@@ -66,18 +85,13 @@ public class AddComputer extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		// Getting the DTO from user's form
-		ComputerDTO c = Util.getComputerDTOFromHttpServlet(request);
-
-		// Fabricating a computer service which is going to add the computer
-		// to the database using a computerDAO
-		if (ComputerValidator.isValide(c)) {
-			Computer computer = Util.fromDTOToComputer(c);
+		ComputerDTO dto = Util.getComputerDTOFromHttpServlet(request);
+		if (ComputerValidator.isValide(dto)) {
+			Computer computerBean = Util.fromDTOToComputer(dto);
 			ComputerService compService = new ComputerService();
 			try {
-				compService.setComputer(computer);
+				compService.updateComputer(computerBean);
 			} catch (SQLException e) {
-				// TODO Add to log and then throw a 404 http error
 				this.getServletContext()
 						.getRequestDispatcher("/WEB-INF/views/404.html")
 						.forward(request, response);
