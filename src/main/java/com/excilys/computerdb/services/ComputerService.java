@@ -33,8 +33,8 @@ public class ComputerService {
 		computerDAO.addComputer(computer);
 	}
 	
-	public void deleteComputer(Computer computer) throws SQLException {
-		computerDAO.deleteComputer(computer.getId());
+	public void deleteComputer(long computerId) throws SQLException {
+		computerDAO.deleteComputer(computerId);
 	}
 	
 	public void updateComputer(Computer computer) throws SQLException {

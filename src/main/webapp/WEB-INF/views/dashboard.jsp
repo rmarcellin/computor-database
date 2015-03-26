@@ -51,7 +51,8 @@
 			</div>
 		</div>
 
-		<form id="deleteForm" action="#" method="POST">
+		<!-- /!\ DELETION /!\  -->
+		<form id="deleteForm" action="DeleteComputer" method="POST">
 			<input type="hidden" name="selection" value="">
 		</form>
 
@@ -84,7 +85,7 @@
 					<c:forEach var="computer" items="${ page.pageElements }">
 						<tr>
 							<td class="editMode"><input type="checkbox" name="cb"
-								class="cb" value="0"></td>
+								class="cb" value="${ computer.id }"></td>
 							<td>
 								
 								<c:url var="editComputer" 
