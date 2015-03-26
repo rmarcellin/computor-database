@@ -28,8 +28,7 @@ public class ComputerValidator {
 			return false;
 		}
 
-		if (computer.getName().contains("<") || computer.getName().contains(">")
-				|| computer.getName().contains("/") || computer.getName().contains(":")) {
+		if (computer.getName().matches("[^\\<$>&^:=]*")) {
 			return false;
 		}
 
