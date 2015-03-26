@@ -41,6 +41,11 @@ public class ComputerDAO {
 	/** The Constant SQL_DELETE_COMPUTER. */
 	private static final String SQL_DELETE_COMPUTER = "DELETE FROM computer WHERE id = ?";
 
+	private static final String SQL_SEARCH = "SELECT * FROM computer WHERE name LIKE '% ? %'";
+
+	// select * from computer comp, company camp where comp.name like '%LL%' and
+	// camp.name like '%pple%' group by comp.name;
+
 	/**
 	 * Instantiates a new computer dao.
 	 *
