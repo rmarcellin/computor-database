@@ -24,6 +24,7 @@ public class CompanyDAO {
 	/** The Constant SQL_SELECT_ALL_COMPANIES. */
 	private static final String SQL_SELECT_ALL_COMPANIES = "SELECT * FROM company";
 	private static final String SQL_SELECT_BY_NAME = "SELECT * FROM company WHERE name = ?";
+	private static final String SQL_SEARCH_COMPANIES = "SELECT * FROM company WHERE name LIKE '% ? %'";
 
 	/**
 	 * Instantiates a new company dao.
@@ -89,9 +90,36 @@ public class CompanyDAO {
 		return companies;
 	}
 	
-	public Company getCompanyById(long id) {
+	public List<Company> getCompaniesSearched(String criteria) throws SQLException {
+		if (criteria == null || criteria.isEmpty()) {
+			return null;
+		}
+		
+		List<Company> companies = new ArrayList<>();
 		Company company = null;
-
-		return company;
+		ResultSet resultSet = null;
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+		
+		try {
+			connection = repository.getConnection();
+			preparedStatement = connection.prepareStatement(SQL_SEARCH_COMPANIES);
+			preparedStatement.setString(1, criteria);
+			resultSet = preparedStatement.executeQuery();
+			
+			while (resultSet.next()) {
+				company = new Company();
+				company.setId(resultSet.getLong("id"));
+				company.setName(resultSet.getString("name"));
+				companies.add(company);
+			}
+			
+		} catch (SQLException e) {
+			throw new DAOException(e);
+		} finally {
+			Util.closeRessources(connection, preparedStatement, resultSet);
+		}
+		
+		return companies;
 	}
 }

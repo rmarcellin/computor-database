@@ -10,7 +10,6 @@ import java.util.List;
  */
 public class Page<Type> {
 	
-	private static int PAGE_SIZE = 10;
 	private static int FOOTER_PAGE_SIZE = 5;
 
 	List<Type> listT;
@@ -22,18 +21,18 @@ public class Page<Type> {
 	private int page;
 	private int footerFirstNbr;
 	
-	public Page (List<Type> listT, int page, int startPageFooter) {
+	public Page (List<Type> listT, int page, int startPageFooter, int pageSize) {
 		this.listT = listT;
 		this.page = page;
 		this.footerFirstNbr = startPageFooter;
 		this.listSize = listT.size();		
-		if (this.listSize > PAGE_SIZE) {
-			this.pageNumbers = this.listSize / PAGE_SIZE;
-			if ((this.listSize % PAGE_SIZE) != 0) {
+		if (this.listSize > pageSize) {
+			this.pageNumbers = this.listSize / pageSize;
+			if ((this.listSize % pageSize) != 0) {
 				pageNumbers++;
 			}
-			supBorder = this.page * PAGE_SIZE;
-			infBorder = supBorder - PAGE_SIZE;			
+			supBorder = this.page * pageSize;
+			infBorder = supBorder - pageSize;			
 		} else {
 			this.pageNumbers = 1;
 			infBorder = 0;

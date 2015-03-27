@@ -24,6 +24,8 @@ import com.excilys.computerdb.utils.Util;
 @WebServlet(description = "Gets all computers from database", urlPatterns = { "/AllComputers" })
 public class AllComputers extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private static int PAGE_SIZE = 10;
+	private static final String MY_PAGE = "page";
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -45,7 +47,7 @@ public class AllComputers extends HttpServlet {
 		try {
 			computers = cs.getComputers();
 		} catch (SQLException e) {
-			// At this point, a log will be done
+			// TODO At this point, a log will be done
 			ctx.getRequestDispatcher("/WEB-INF/views/404.html").forward(
 					request, response);
 		}
@@ -66,8 +68,8 @@ public class AllComputers extends HttpServlet {
 		// A page containing a list of computers is sent the user. The list will be
 		// shown
 		Page<ComputerDTO> page = new Page<ComputerDTO>(computersDTO,
-				defaultPageNum, defaultPageNumFooter);
-		request.setAttribute("page", page);
+				defaultPageNum, defaultPageNumFooter, PAGE_SIZE);
+		request.setAttribute(MY_PAGE, page);
 		ctx.getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(
 				request, response);
 	}

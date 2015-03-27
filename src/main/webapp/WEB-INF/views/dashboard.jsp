@@ -13,6 +13,7 @@
 <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
 <link href="css/font-awesome.css" rel="stylesheet" media="screen">
 <link href="css/main.css" rel="stylesheet" media="screen">
+<link href="css/dashboard.css" rel="stylesheet" media="screen">
 </head>
 <body>
 
@@ -40,7 +41,7 @@
 							class="form-control" placeholder="Search name" /> <input
 							type="submit" id="searchsubmit" value="Filter by name"
 							class="btn btn-primary" />
-					</form>
+					</form>					
 				</div>
 				<div class="pull-right">
 					<c:url var="addComputer" value="/AddComputer" />
@@ -70,12 +71,33 @@
 									class="fa fa-trash-o fa-lg"></i>
 							</a>
 						</span></th>
-						<th>Computer name</th>
-						<th>Introduced date</th>
+						<th>	
+							Computer name &nbsp;				
+							<a href="#">
+								<span class="glyphicon glyphicon-sort"></span>
+							</a> 						
+						</th>
+						<th>
+							Introduced date &nbsp;				
+							<a href="#">
+								<span class="glyphicon glyphicon-sort"></span>
+							</a> 
+							
+						</th>
 						<!-- Table header for Discontinued Date -->
-						<th>Discontinued date</th>
+						<th>
+							Discontinued date &nbsp;				
+							<a href="#">
+								<span class="glyphicon glyphicon-sort"></span>
+							</a> 
+						</th>
 						<!-- Table header for Company -->
-						<th>Company</th>
+						<th>
+							Company &nbsp;				
+							<a href="#">
+								<span class="glyphicon glyphicon-sort"></span>
+							</a> 
+						</th>
 
 					</tr>
 				</thead>
@@ -109,6 +131,15 @@
 
 				</tbody>
 			</table>
+			<c:if test="${ errorsNbr != 0 }">
+				<ul id="_errors">
+					<c:forEach var="error" items="${ errors }">
+						<li>
+							<c:out value="${ error }" />
+						</li>
+					</c:forEach>
+				</ul>
+			</c:if>
 		</div>
 	</section>
 

@@ -41,10 +41,11 @@ public class ComputerDAO {
 	/** The Constant SQL_DELETE_COMPUTER. */
 	private static final String SQL_DELETE_COMPUTER = "DELETE FROM computer WHERE id = ?";
 
-	private static final String SQL_SEARCH = "SELECT * FROM computer WHERE name LIKE '% ? %'";
-
-	// select * from computer comp, company camp where comp.name like '%LL%' and
-	// camp.name like '%pple%' group by comp.name;
+	private static final String SQL_SEARCH_COMPUTERS = 
+			"SELECT * FROM computer "
+			+ "LEFT OUTER JOIN company "
+			+ "ON computer.company_id = company.id WHERE UCASE(computer.name) "
+			+ "LIKE ? or UCASE(company.name) LIKE ?";
 
 	/**
 	 * Instantiates a new computer dao.
@@ -53,7 +54,6 @@ public class ComputerDAO {
 	 *            the repository dao
 	 */
 	public ComputerDAO(DAOFactory daoFactory) {
-		// TODO Auto-generated constructor stub
 		this.daoFactory = daoFactory;
 	}
 
@@ -269,6 +269,46 @@ public class ComputerDAO {
 			connection = daoFactory.getConnection();
 			preparedStatement = connection
 					.prepareStatement(SQL_SELECT_ALL_COMPUTERS);
+			resultSet = preparedStatement.executeQuery();
+
+			while (resultSet.next()) {
+				String companyName = "";
+				computer = new ComputerMapper().mapResultSet(resultSet);
+				long companyId = computer.getCompanyId();
+				if (companyId != 0) {
+					companyName = Util
+							.getCompanyNameById(companyId, connection);
+					computer.setCompanyName(companyName);
+				}
+				listComp.add(computer);
+			}
+		} catch (SQLException e) {
+			throw new DAOException(e);
+		} finally {
+			Util.closeRessources(connection, preparedStatement, resultSet);
+		}
+
+		return listComp;
+	}
+
+	public List<Computer> getComputersSearched(String criteria)
+			throws SQLException {
+		if (criteria == null || criteria.isEmpty()) {
+			return null;
+		}
+
+		List<Computer> listComp = new ArrayList<>();
+		Computer computer = null;
+		ResultSet resultSet = null;
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+
+		try {
+			connection = daoFactory.getConnection();
+			preparedStatement = connection
+					.prepareStatement(SQL_SEARCH_COMPUTERS);
+			preparedStatement.setString(1, "%" + criteria + "%");
+			preparedStatement.setString(2, "%" + criteria + "%");
 			resultSet = preparedStatement.executeQuery();
 
 			while (resultSet.next()) {

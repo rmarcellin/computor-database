@@ -1,7 +1,6 @@
 package com.excilys.computerdb.services;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 import com.excilys.computerdb.beans.Computer;
@@ -22,9 +21,8 @@ public class ComputerService {
 		return computerDAO.getComputers();
 	}
 	
-	public List<Computer> getComputersSearched(String criteria) {
-		// TODO /!\
-		return new ArrayList<Computer>();
+	public List<Computer> getComputersSearched(String criteria) throws SQLException {
+		return computerDAO.getComputersSearched(criteria);
 	}
 	
 	public Computer getComputerById(long id) throws SQLException {
