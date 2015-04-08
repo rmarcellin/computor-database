@@ -5,50 +5,72 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.joda.time.LocalDate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.excilys.computerdb.dto.ComputerDTO;
 import com.excilys.computerdb.utils.*;
 
 public class ComputerValidator {
+	private static Logger logger = LoggerFactory.getLogger(ComputerValidator.class);
+	
+	private static final String COMPUTER_NULL = "Computer object null";
+	private static final String COMPUTER_NAME_EMPTY = "Computer name empty";
+	private static final String COMPUTER_NAME_NULL = "Computer name null";
+	private static final String COMPUTER_NAME_LENGTH = "Computer name's length too short";
+	private static final String INTRO_NOT_VALID_DATE = "Invalid \"Introduced\" date";
+	private static final String DISCO_NOT_VALID_DATE = "Invalid \"Discontinued\" date";
 
 	public static boolean isValide(ComputerDTO computer) {
 		// TODO Log errors
 
 		// COMPUTER NAME
 		if (computer == null) {
+			logger.error(COMPUTER_NULL);
 			return false;
 		}
 		if (computer.getName() == null) {
+			logger.error(COMPUTER_NAME_NULL);
 			return false;
 		}
 		if (computer.getName().isEmpty()) {
+			logger.error(COMPUTER_NAME_EMPTY);
 			return false;
 		}
 		if (computer.getName().length() < 2) {
+			logger.error(COMPUTER_NAME_LENGTH);
 			return false;
 		}
 
 		// COMPUTER INTRODUCED
 		if (computer.getIntroduced() != null) {
 			String introDate = computer.getIntroduced();
-			if (!Util.isDateValid(introDate + " 00:00:00")) {
-				return false;
-			}			
-			LocalDate intro = Util.produceLocalDateFromString(introDate);
-			if (!isValideMonth(intro)) {
-				return false;
+			if (!introDate.isEmpty()) {
+				if (!Util.isDateValid(introDate + " 00:00:00")) {
+					logger.error(INTRO_NOT_VALID_DATE);
+					return false;
+				}			
+				LocalDate intro = Util.produceLocalDateFromString(introDate);
+				if (!isValideMonth(intro)) {
+					logger.error(INTRO_NOT_VALID_DATE);
+					return false;
+				}
 			}
 		}
 
 		// COMPUTER DISCONINUED
 		if (computer.getDiscontinued() != null) {
 			String discoDate = computer.getIntroduced();
-			if (!Util.isDateValid(discoDate + " 00:00:00")) {
-				return false;
-			}
-			LocalDate dico = Util.produceLocalDateFromString(discoDate);
-			if (!isValideMonth(dico)) {
-				return false;
+			if (!discoDate.isEmpty()) {
+				if (!Util.isDateValid(discoDate + " 00:00:00")) {
+					logger.error(DISCO_NOT_VALID_DATE);
+					return false;
+				}
+				LocalDate dico = Util.produceLocalDateFromString(discoDate);
+				if (!isValideMonth(dico)) {
+					logger.error(DISCO_NOT_VALID_DATE);
+					return false;
+				}
 			}
 		}
 

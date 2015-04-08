@@ -15,7 +15,7 @@
 <body>
     <header class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
-        	<c:url var="allComputer" value="/AllComputers" />
+        	<c:url var="allComputer" value="/Dashboard" />
             <a class="navbar-brand" href="${ allComputer }"> Application - Computer Database </a>
         </div>
     </header>

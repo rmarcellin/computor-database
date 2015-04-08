@@ -34,8 +34,7 @@ public class ComputerDAO {
 			+ "VALUES (?, ?, ?, ?)";
 
 	/** The Constant SQL_UPDATE_COMPUTER. */
-	private static final String SQL_UPDATE_COMPUTER = "UPDATE computer SET name = ?, introduced = ?, "
-			+ "discontinued = ?, company_id = ? WHERE id = ?";
+	private static StringBuilder sqlUpateComp = new StringBuilder("UPDATE computer SET name = ");
 
 	/** The Constant SQL_DELETE_COMPUTER. */
 	private static final String SQL_DELETE_COMPUTER = "DELETE FROM computer WHERE id = ?";
@@ -106,20 +105,32 @@ public class ComputerDAO {
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 
-		try {
+		try {			
+			// UPDATING			
+			sqlUpateComp.append(computer.getName() + ",");			
+			
+			Timestamp intro = Util.getTimeStampFromLocalDate(computer.getIntroduced());
+			if (intro != null) {
+				sqlUpateComp.append(" introduced = " + intro.toString() + ","); 
+			}
+			
+			Timestamp disco = Util.getTimeStampFromLocalDate(computer.getDiscontinued());
+			if (disco != null) {
+				sqlUpateComp.append(" discontinued = " + disco.toString() + ",");
+			}
+			
+			if (computer.getCompanyId() != 0) {
+				sqlUpateComp.append(" company_id =  " + computer.getCompanyId() + ",");
+			}
+			
+			sqlUpateComp.append(" WHERE id = " + computer.getId());
+			
+			System.out.println(sqlUpateComp.toString());
+			
 			connection = daoFactory.getConnection();
 			preparedStatement = connection
-					.prepareStatement(SQL_UPDATE_COMPUTER);
-
-			// UPDATING
-			preparedStatement.setString(1, computer.getName());
-			preparedStatement.setTimestamp(2,
-					Util.getTimeStampFromLocalDate(computer.getIntroduced()));
-			preparedStatement.setTimestamp(3,
-					Util.getTimeStampFromLocalDate(computer.getDiscontinued()));
-			preparedStatement.setLong(4, computer.getCompanyId());
-			preparedStatement.setLong(5, computer.getId());
-
+					.prepareStatement(sqlUpateComp.toString());			
+			
 			int status = preparedStatement.executeUpdate();
 			if (status == 0) {
 				throw new DAOException("Failed to update computer : "

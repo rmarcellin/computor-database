@@ -44,7 +44,7 @@ public class DeleteComputer extends HttpServlet {
 			// TODO Log the exception
 			throw new DAOException();
 		}		
-		response.sendRedirect("/computer-database/AllComputers");
+		response.sendRedirect("/computer-database/Dashboard");
 	}
 
 }

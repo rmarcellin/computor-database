@@ -81,7 +81,7 @@ public class AddComputer extends HttpServlet {
 						.getRequestDispatcher("/WEB-INF/views/404.html")
 						.forward(request, response);
 			}
-			response.sendRedirect("AllComputers");
+			response.sendRedirect("Dashboard");
 		} else {
 			// TODO Log the error
 			this.getServletContext()

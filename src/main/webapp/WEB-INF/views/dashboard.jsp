@@ -18,7 +18,7 @@
 <body>
 
 	<c:set scope="session" var="computers" value="" />
-	<c:url var="thisPage" value="/AllComputers" />
+	<c:url var="thisPage" value="/Dashboard" />
 	
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
@@ -74,7 +74,7 @@
 						<th>	
 							Computer name &nbsp;
 							<!-- /!\ ORDER-BY /!\  -->
-							<c:url var="orderByName" value="/AllComputers">
+							<c:url var="orderByName" value="/Dashboard">
 								<c:param name="pageNum" value="${ page.page }" />
 								<c:param name="startP" value="${ page.pageStart }" />
 								<c:param name="sortKey" value="name"/>
@@ -86,7 +86,7 @@
 						<th>
 							Introduced date &nbsp;
 							<!-- /!\ ORDER-BY /!\  -->
-							<c:url var="orderByIntroduced" value="/AllComputers">
+							<c:url var="orderByIntroduced" value="/Dashboard">
 								<c:param name="pageNum" value="${ page.page }" />
 								<c:param name="startP" value="${ page.pageStart }" />
 								<c:param name="sortKey" value="introduced"/>
@@ -100,7 +100,7 @@
 						<th>
 							Discontinued date &nbsp;
 							<!-- /!\ ORDER-BY /!\  -->
-							<c:url var="orderByDiscontinued" value="/AllComputers">
+							<c:url var="orderByDiscontinued" value="/Dashboard">
 								<c:param name="pageNum" value="${ page.page }" />
 								<c:param name="startP" value="${ page.pageStart }" />
 								<c:param name="sortKey" value="discontinued"/>
@@ -113,7 +113,7 @@
 						<th>
 							Company &nbsp;
 							<!-- /!\ ORDER-BY /!\  -->	
-							<c:url var="orderByCompanyId" value="/AllComputers">
+							<c:url var="orderByCompanyId" value="/Dashboard">
 								<c:param name="pageNum" value="${ page.page }" />
 								<c:param name="startP" value="${ page.pageStart }" />
 								<c:param name="sortKey" value="company_id"/>
@@ -170,7 +170,7 @@
 	<footer class="navbar-fixed-bottom">
 		<p:page pageNumbers="${ page.pageNumbers }"
 			nextPage="${ page.nextPage }" previousPage="${ page.previousPage }"
-			url="/AllComputers" page="${ page.page }"
+			url="/Dashboard" page="${ page.page }"
 			pageStart="${ page.pageStart }" />
 	</footer>
 	<script src="js/jquery.min.js"></script>

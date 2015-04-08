@@ -12,6 +12,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.excilys.computerdb.beans.Company;
 import com.excilys.computerdb.beans.Computer;
 import com.excilys.computerdb.dto.CompanyDTO;
@@ -26,6 +29,10 @@ import com.excilys.computerdb.validators.ComputerValidator;
 @WebServlet("/EditComputer")
 public class EditComputer extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	
+	private static final Logger logger = LoggerFactory.getLogger(EditComputer.class);
+	private static final String EDIT_COMPUTER_SERVLET_CALLED = 
+			"Edit computer servlet called";
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -41,8 +48,9 @@ public class EditComputer extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
+		logger.info(EDIT_COMPUTER_SERVLET_CALLED);
 		// TODO Validate before saving computer into database
-		// TODO Log errors if there any problem
+		// TODO Log errors if any
 		ServletContext scxt = this.getServletContext();
 
 		// In the form, the user will have a dropdown list of all the companies
@@ -96,7 +104,7 @@ public class EditComputer extends HttpServlet {
 						.getRequestDispatcher("/WEB-INF/views/404.html")
 						.forward(request, response);
 			}
-			response.sendRedirect("AllComputers");
+			response.sendRedirect("Dashboard");
 		} else {
 			// TODO Log the error
 			this.getServletContext()

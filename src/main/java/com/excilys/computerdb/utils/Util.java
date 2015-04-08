@@ -35,6 +35,9 @@ public class Util {
 	 * @pre ld != null
 	 */
 	public static Timestamp getTimeStampFromLocalDate(LocalDate ld) {
+		if (ld == null) {
+			return null;
+		}
 		return Timestamp.valueOf(ld.getYear() + "-" + ld.getMonthOfYear() + "-"
 				+ ld.getDayOfMonth() + " 00:00:00.0");
 	}
@@ -82,6 +85,11 @@ public class Util {
 
 	public static LocalDate produceLocalDateFromString(String localDate) {
 		if (localDate == null) {
+			return null;
+		}
+		
+		String tmp = localDate.trim();
+		if (tmp.isEmpty()) {
 			return null;
 		}
 				
