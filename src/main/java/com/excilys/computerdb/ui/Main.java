@@ -27,7 +27,7 @@ public class Main {
 		System.out.println("+---------------------------------------------------------------+");
 		
 		ComputerService cs = new ComputerService();
-		System.out.println(cs.getComputers());
+		System.out.println(cs.getComputers(null, null));
 		
 	}
 

@@ -24,7 +24,6 @@ public class DeleteComputer extends HttpServlet {
      */
     public DeleteComputer() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
 	/**

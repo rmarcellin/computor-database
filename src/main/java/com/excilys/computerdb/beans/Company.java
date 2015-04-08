@@ -1,6 +1,5 @@
 package com.excilys.computerdb.beans;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class Company.
  */

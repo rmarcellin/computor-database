@@ -2,8 +2,6 @@ package com.excilys.computerdb.beans;
 
 import org.joda.time.LocalDate;
 
-
-// TODO: Auto-generated Javadoc
 /**
  * The Class Computer.
  */

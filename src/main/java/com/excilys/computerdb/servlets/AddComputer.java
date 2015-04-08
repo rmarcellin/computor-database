@@ -30,7 +30,6 @@ public class AddComputer extends HttpServlet {
 	 */
 	public AddComputer() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	/**

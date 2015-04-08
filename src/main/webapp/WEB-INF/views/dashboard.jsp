@@ -10,10 +10,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta charset="utf-8">
 <!-- Bootstrap -->
-<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
-<link href="css/font-awesome.css" rel="stylesheet" media="screen">
-<link href="css/main.css" rel="stylesheet" media="screen">
-<link href="css/dashboard.css" rel="stylesheet" media="screen">
+<link href="css/bootstrap.min.css" 	rel="stylesheet" 	media="screen">
+<link href="css/font-awesome.css" 	rel="stylesheet" 	media="screen">
+<link href="css/main.css" 			rel="stylesheet" 	media="screen">
+<link href="css/dashboard.css" 		rel="stylesheet" 	media="screen">
 </head>
 <body>
 
@@ -34,9 +34,9 @@
 				Computers found
 			</h1>
 			<div id="actions" class="form-horizontal">
+				<!-- /!\ SEARCH /!\  -->
 				<div class="pull-left">
 					<form id="searchForm" action="SearchServlet" method="GET" class="form-inline">
-
 						<input type="search" id="searchbox" name="search"
 							class="form-control" placeholder="Search name" /> <input
 							type="submit" id="searchsubmit" value="Filter by name"
@@ -72,29 +72,53 @@
 							</a>
 						</span></th>
 						<th>	
-							Computer name &nbsp;				
-							<a href="#">
+							Computer name &nbsp;
+							<!-- /!\ ORDER-BY /!\  -->
+							<c:url var="orderByName" value="/AllComputers">
+								<c:param name="pageNum" value="${ page.page }" />
+								<c:param name="startP" value="${ page.pageStart }" />
+								<c:param name="sortKey" value="name"/>
+							</c:url>				
+							<a href="${ orderByName }">
 								<span class="glyphicon glyphicon-sort"></span>
 							</a> 						
 						</th>
 						<th>
-							Introduced date &nbsp;				
-							<a href="#">
+							Introduced date &nbsp;
+							<!-- /!\ ORDER-BY /!\  -->
+							<c:url var="orderByIntroduced" value="/AllComputers">
+								<c:param name="pageNum" value="${ page.page }" />
+								<c:param name="startP" value="${ page.pageStart }" />
+								<c:param name="sortKey" value="introduced"/>
+							</c:url>			
+							<a href="${ orderByIntroduced }">
 								<span class="glyphicon glyphicon-sort"></span>
 							</a> 
 							
 						</th>
 						<!-- Table header for Discontinued Date -->
 						<th>
-							Discontinued date &nbsp;				
-							<a href="#">
+							Discontinued date &nbsp;
+							<!-- /!\ ORDER-BY /!\  -->
+							<c:url var="orderByDiscontinued" value="/AllComputers">
+								<c:param name="pageNum" value="${ page.page }" />
+								<c:param name="startP" value="${ page.pageStart }" />
+								<c:param name="sortKey" value="discontinued"/>
+							</c:url>	
+							<a href="${ orderByDiscontinued }">
 								<span class="glyphicon glyphicon-sort"></span>
 							</a> 
 						</th>
 						<!-- Table header for Company -->
 						<th>
-							Company &nbsp;				
-							<a href="#">
+							Company &nbsp;
+							<!-- /!\ ORDER-BY /!\  -->	
+							<c:url var="orderByCompanyId" value="/AllComputers">
+								<c:param name="pageNum" value="${ page.page }" />
+								<c:param name="startP" value="${ page.pageStart }" />
+								<c:param name="sortKey" value="company_id"/>
+							</c:url>	
+							<a href="${ orderByCompanyId }">
 								<span class="glyphicon glyphicon-sort"></span>
 							</a> 
 						</th>

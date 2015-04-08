@@ -17,8 +17,8 @@ public class ComputerService {
 		computerDAO = new ComputerDAO(factory);
 	}
 	
-	public List<Computer> getComputers() throws SQLException {
-		return computerDAO.getComputers();
+	public List<Computer> getComputers(String key, String sortOrder) throws SQLException {
+		return computerDAO.getComputers(key, sortOrder);
 	}
 	
 	public List<Computer> getComputersSearched(String criteria) throws SQLException {

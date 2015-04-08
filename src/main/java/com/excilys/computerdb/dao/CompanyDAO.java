@@ -12,7 +12,6 @@ import com.excilys.computerdb.mapper.CompanyMapper;
 import com.excilys.computerdb.exception.DAOException;
 import com.excilys.computerdb.utils.Util;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class CompanyDAO.
  */

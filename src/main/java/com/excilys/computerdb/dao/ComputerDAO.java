@@ -12,7 +12,6 @@ import com.excilys.computerdb.exception.DAOException;
 import com.excilys.computerdb.mapper.ComputerMapper;
 import com.excilys.computerdb.utils.Util;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class ComputerDAO.
  */
@@ -41,8 +40,7 @@ public class ComputerDAO {
 	/** The Constant SQL_DELETE_COMPUTER. */
 	private static final String SQL_DELETE_COMPUTER = "DELETE FROM computer WHERE id = ?";
 
-	private static final String SQL_SEARCH_COMPUTERS = 
-			"SELECT * FROM computer "
+	private static final String SQL_SEARCH_COMPUTERS = "SELECT * FROM computer "
 			+ "LEFT OUTER JOIN company "
 			+ "ON computer.company_id = company.id WHERE UCASE(computer.name) "
 			+ "LIKE ? or UCASE(company.name) LIKE ?";
@@ -258,7 +256,8 @@ public class ComputerDAO {
 	 * @throws SQLException
 	 *             the SQL exception
 	 */
-	public List<Computer> getComputers() throws SQLException {
+	public List<Computer> getComputers(String key, String sortOrder)
+			throws SQLException {
 		List<Computer> listComp = new ArrayList<>();
 		Computer computer = null;
 		ResultSet resultSet = null;
@@ -267,8 +266,15 @@ public class ComputerDAO {
 
 		try {
 			connection = daoFactory.getConnection();
-			preparedStatement = connection
-					.prepareStatement(SQL_SELECT_ALL_COMPUTERS);
+			// Test if non sort order and key were given
+			if (key == null || sortOrder == null) {
+				preparedStatement = connection
+						.prepareStatement(SQL_SELECT_ALL_COMPUTERS);
+			} else {
+				preparedStatement = connection
+						.prepareStatement(SQL_SELECT_ALL_COMPUTERS
+								+ " ORDER BY " + key + " " + sortOrder);
+			}
 			resultSet = preparedStatement.executeQuery();
 
 			while (resultSet.next()) {

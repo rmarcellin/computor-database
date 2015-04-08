@@ -13,7 +13,6 @@ import java.util.Properties;
 import com.excilys.computerdb.exception.DAOConfException;
 
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class RepositoryDAO.
  *

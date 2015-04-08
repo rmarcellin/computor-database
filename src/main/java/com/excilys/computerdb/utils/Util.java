@@ -18,12 +18,13 @@ import com.excilys.computerdb.beans.*;
 import com.excilys.computerdb.dto.CompanyDTO;
 import com.excilys.computerdb.dto.ComputerDTO;
 import com.excilys.computerdb.exception.DAOException;
-
-// TODO: Auto-generated Javadoc
 /**
  * The Class Util.
  */
 public class Util {
+	
+	private static final String SORT_ORDER_NOT_SPECIFIED = 
+			"Sort order not specified";
 
 	/**
 	 * Gets the time stamp from local date.
@@ -207,5 +208,21 @@ public class Util {
 		computerDTO.setCompanyId(Long.parseLong(request.getParameter("companyId")));
 
 		return computerDTO;
+	}
+	
+	public static String getNextSortOrder (String currentOrder) {
+		if (currentOrder == null) {
+			throw new IllegalArgumentException(SORT_ORDER_NOT_SPECIFIED);
+		} else {
+			String tmp = currentOrder.trim();
+			if (tmp.isEmpty()) {
+				throw new IllegalArgumentException();
+			}			
+		}
+		if (currentOrder.equals("default") || currentOrder.equals("desc")) {
+			return "asc";
+		} else {
+			return "desc";
+		}
 	}
 }

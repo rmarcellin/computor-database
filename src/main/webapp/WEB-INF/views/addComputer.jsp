@@ -15,8 +15,8 @@
 <body>
     <header class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
-        	<c:url var="addComputer" value="/AllComputers" />
-            <a class="navbar-brand" href="${ addComputer }"> Application - Computer Database </a>
+        	<c:url var="allComputer" value="/AllComputers" />
+            <a class="navbar-brand" href="${ allComputer }"> Application - Computer Database </a>
         </div>
     </header>
 
@@ -53,7 +53,7 @@
                         <div class="actions pull-right">
                             <input type="submit" value="Add" class="btn btn-primary">
                             or
-                            <a href="dashboard.html" class="btn btn-default">Cancel</a>
+                            <a href="${ allComputer }" class="btn btn-default">Cancel</a>
                         </div>
                     </form>
                 </div>

@@ -14,7 +14,7 @@ public enum Command {
 			if (daoFactory == null) {
 				throw new IllegalArgumentException();
 			}
-			System.out.println(daoFactory.getComputerDAO().getComputers());
+			System.out.println(daoFactory.getComputerDAO().getComputers(null, null));
 		}
 	},
 	GET_ALL_COMPANIES ("allCompanies") {
@@ -29,35 +29,30 @@ public enum Command {
 	GET_ONE_COMPUTER ("oneComputer") {
 		@Override
 		public void execute(DAOFactory daoFactory) {
-			// TODO Auto-generated method stub
 			
 		}
 	},
 	CREATE_COMPUTER ("createComputer") {
 		@Override
 		public void execute(DAOFactory daoFactory) {
-			// TODO Auto-generated method stub
 			
 		}
 	},
 	UPDATE_COMPUTER ("updateComputer") {
 		@Override
 		public void execute(DAOFactory daoFactory) {
-			// TODO Auto-generated method stub
 			
 		}
 	},
 	DELETE_COMPUTER ("deleteComputer") {
 		@Override
 		public void execute(DAOFactory daoFactory) {
-			// TODO Auto-generated method stub
 			
 		}
 	},
 	EXIT ("exit") {
 		@Override
 		public void execute(DAOFactory daoFactory) {
-			// TODO Auto-generated method stub
 			
 		}
 	};

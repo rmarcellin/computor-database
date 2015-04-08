@@ -3,12 +3,16 @@ package com.excilys.computerdb.ui;
 import java.util.List;
 
 
-
-// TODO: Auto-generated Javadoc
 /**
  * The Class Page.
  */
 public class Page<Type> {
+	
+	/*private enum OrderCriteria {
+		NAME_DEFAULT, NAME_ASC, NAME_DESC,
+		INTRO_DEFAULT, INTRO_ASC, INTRO_DESC,
+		DISCO_DEFAULT, DISCO_ASC, DISCO_DESC,
+		COMP_ID_DEFAULT, COMP_ID_ASC, COMP_ID_DESC}*/
 	
 	private static int FOOTER_PAGE_SIZE = 5;
 
@@ -20,6 +24,7 @@ public class Page<Type> {
 	private int pageNumbers;
 	private int page;
 	private int footerFirstNbr;
+	//private OrderCriteria orderCriteria;
 	
 	public Page (List<Type> listT, int page, int startPageFooter, int pageSize) {
 		this.listT = listT;
@@ -38,6 +43,8 @@ public class Page<Type> {
 			infBorder = 0;
 			supBorder = listSize;
 		}
+		
+		//orderCriteria = OrderCriteria.NAME_DEFAULT;
 		
 	}
 	
@@ -87,5 +94,13 @@ public class Page<Type> {
 		}
 		return tmp;
 	}
+	
+	/*public void nextCriteria() {
+		if (orderCriteria == OrderCriteria.ASC) {
+			orderCriteria = OrderCriteria.DESC;
+		} else {
+			orderCriteria = OrderCriteria.ASC;
+		}
+	}*/
 	
 }
