@@ -12,6 +12,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.excilys.computerdb.dto.*;
 import com.excilys.computerdb.services.*;
 import com.excilys.computerdb.utils.Util;
@@ -24,12 +27,37 @@ import com.excilys.computerdb.beans.*;
 @WebServlet(description = "Adds a computer into database", urlPatterns = { "/AddComputer" })
 public class AddComputer extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	
+	private static final Logger logger = LoggerFactory.getLogger(AddComputer.class);
+	
+	/**
+	 * INITIALISATION
+	 */
+	private static final String INITIALISATION = "AddComputer servlet called";
+	
+	/**
+	 * doGet / doPost
+	 */
+	private static final String DO_GET_POST_STARTED = "method called";
+	private static final String DO_GET_POST_CONTEXT_FAILURE = "Context ~ Request dispatcher failure";
+	private static final String DO_GET_POST_SUCCEDED = "method succeded";
+	
+	/**
+	 * doGet
+	 */
+	
+	
+	/**
+	 * doPost
+	 */
+	//private static final String DO_POST_
 
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
 	public AddComputer() {
 		super();
+		logger.info(INITIALISATION);
 	}
 
 	/**
@@ -38,6 +66,7 @@ public class AddComputer extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
+		logger.info("doGet " + DO_GET_POST_STARTED);
 		ServletContext scxt = this.getServletContext();
 		// In the form, the user will have a dropdown list of all the companies
 		// present in the database
@@ -46,7 +75,7 @@ public class AddComputer extends HttpServlet {
 		try {
 			listCompany = cs.getCompanies();
 		} catch (SQLException e) {
-			// At this point, a log will be done
+			logger.error("doGet " + DO_GET_POST_CONTEXT_FAILURE);
 			scxt.getRequestDispatcher("/WEB-INF/views/404.html").forward(
 					request, response);
 		}
@@ -55,6 +84,7 @@ public class AddComputer extends HttpServlet {
 			companiesDTO.add(Util.fromCompanyToDTO(comp));
 		}
 		request.setAttribute("companies", companiesDTO);
+		logger.info("doGet " + DO_GET_POST_SUCCEDED);
 		scxt.getRequestDispatcher("/WEB-INF/views/addComputer.jsp").forward(
 				request, response);
 	}
@@ -65,6 +95,7 @@ public class AddComputer extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
+		logger.info("doPost " + DO_GET_POST_STARTED);
 		// Getting the DTO from user's form
 		ComputerDTO c = Util.getComputerDTOFromHttpServlet(request);
 
@@ -76,14 +107,15 @@ public class AddComputer extends HttpServlet {
 			try {
 				compService.setComputer(computer);
 			} catch (SQLException e) {
-				// TODO Add to log and then throw a 404 http error
+				logger.error("doPost " + DO_GET_POST_CONTEXT_FAILURE);
 				this.getServletContext()
 						.getRequestDispatcher("/WEB-INF/views/404.html")
 						.forward(request, response);
 			}
 			response.sendRedirect("Dashboard");
+			logger.info("doPost " + DO_GET_POST_SUCCEDED);
 		} else {
-			// TODO Log the error
+			logger.error("doGPost " + DO_GET_POST_CONTEXT_FAILURE);
 			this.getServletContext()
 					.getRequestDispatcher("/WEB-INF/views/404.html")
 					.forward(request, response);

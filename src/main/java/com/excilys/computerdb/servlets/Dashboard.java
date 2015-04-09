@@ -14,6 +14,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.excilys.computerdb.beans.Computer;
 import com.excilys.computerdb.dto.ComputerDTO;
 import com.excilys.computerdb.services.ComputerService;
@@ -28,6 +31,20 @@ public class Dashboard extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static int PAGE_SIZE = 10;
 	private static final String MY_PAGE = "page";
+	
+	private static final Logger logger = LoggerFactory.getLogger(Dashboard.class);
+	/**
+	 * INITIALISATION
+	 */
+	private static final String INITIALISATION = "AddComputer servlet called";
+	
+	/**
+	 * doGet / doPost
+	 */
+	private static final String DO_GET_POST_STARTED = "method called";
+	private static final String DO_GET_POST_CONTEXT_FAILURE = "Context ~ Request dispatcher failure";
+	private static final String DO_GET_POST_SUCCEDED = "method succeded";
+	
 	/**
 	 * This map contains the state of JSP's table columns. Its values tell
 	 * if the column corresponding to each key is sorted and in witch order.
@@ -39,6 +56,7 @@ public class Dashboard extends HttpServlet {
 	 */
 	public Dashboard() {
 		super();
+		logger.info(INITIALISATION);
 		sortKeyOrder.put("name", "default");
 		sortKeyOrder.put("introduced", "default");
 		sortKeyOrder.put("discontinued", "default");
@@ -51,11 +69,11 @@ public class Dashboard extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
+		logger.info("doGet " + DO_GET_POST_STARTED);
 		ServletContext ctx = this.getServletContext();
 		List<Computer> computers = null;
 		ComputerService cs = new ComputerService();
 		try {
-			// TODO FINISH SORTING
 			// Getting the column to be sorted and the order in witch it must be sorted
 			// sortKey corresponds to the column to be sorted
 			String sortKey = request.getParameter("sortKey");
@@ -82,7 +100,7 @@ public class Dashboard extends HttpServlet {
 				//request.setAttribute("sortKey", sortKey);
 			}			
 		} catch (SQLException e) {
-			// TODO At this point, a log will be done
+			logger.error("doGet " + DO_GET_POST_CONTEXT_FAILURE);
 			ctx.getRequestDispatcher("/WEB-INF/views/404.html").forward(
 					request, response);
 		}
@@ -107,6 +125,7 @@ public class Dashboard extends HttpServlet {
 		request.setAttribute(MY_PAGE, page);
 		ctx.getRequestDispatcher("/WEB-INF/views/dashboard.jsp")
 			.forward(request, response);
+		logger.info("doGet " + DO_GET_POST_SUCCEDED);
 	}
 
 }

@@ -30,7 +30,21 @@ import com.excilys.computerdb.validators.ComputerValidator;
 public class EditComputer extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
-	private static final Logger logger = LoggerFactory.getLogger(EditComputer.class);
+	private static final Logger logger = LoggerFactory.getLogger(AddComputer.class);
+	/**
+	 * INITIALISATION
+	 */
+	private static final String INITIALISATION = "AddComputer servlet called";
+	
+	/**
+	 * doGet / doPost
+	 */
+	private static final String DO_GET_POST_STARTED = "method called";
+	private static final String DO_GET_POST_SUCCEDED = "method succeded";
+	private static final String DO_GET_POST_DISPLAY_COMPANIES = "Retrieving companies to be displayed";
+	private static final String DO_POST_EDIT_FAILURE = "edit problem occured";
+	private static final String DO_GET_POST_FORM_VALIDATION_PROBLEM = "form validation problem";
+	
 	private static final String EDIT_COMPUTER_SERVLET_CALLED = 
 			"Edit computer servlet called";
 
@@ -39,7 +53,7 @@ public class EditComputer extends HttpServlet {
 	 */
 	public EditComputer() {
 		super();
-		// TODO Auto-generated constructor stub
+		logger.info(INITIALISATION);
 	}
 
 	/**
@@ -49,8 +63,6 @@ public class EditComputer extends HttpServlet {
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		logger.info(EDIT_COMPUTER_SERVLET_CALLED);
-		// TODO Validate before saving computer into database
-		// TODO Log errors if any
 		ServletContext scxt = this.getServletContext();
 
 		// In the form, the user will have a dropdown list of all the companies
@@ -58,9 +70,10 @@ public class EditComputer extends HttpServlet {
 		CompanyService cs = new CompanyService();
 		List<Company> listCompany = null;
 		try {
+			logger.info("doGet " + DO_GET_POST_DISPLAY_COMPANIES);
 			listCompany = cs.getCompanies();
 		} catch (SQLException e) {
-			// At this point, a log will be done
+			logger.error("doGet " + DO_POST_EDIT_FAILURE);
 			scxt.getRequestDispatcher("/WEB-INF/views/404.html").forward(
 					request, response);
 		}
@@ -85,6 +98,7 @@ public class EditComputer extends HttpServlet {
 
 		scxt.getRequestDispatcher("/WEB-INF/views/editComputer.jsp").forward(
 				request, response);
+		logger.info("doGet " + DO_GET_POST_SUCCEDED);
 	}
 
 	/**
@@ -93,6 +107,7 @@ public class EditComputer extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
+		logger.info("doPost " + DO_GET_POST_STARTED);
 		ComputerDTO dto = Util.getComputerDTOFromHttpServlet(request);
 		if (ComputerValidator.isValide(dto)) {
 			Computer computerBean = Util.fromDTOToComputer(dto);
@@ -100,13 +115,16 @@ public class EditComputer extends HttpServlet {
 			try {
 				compService.updateComputer(computerBean);
 			} catch (SQLException e) {
+				logger.error("doPost " + DO_POST_EDIT_FAILURE);
 				this.getServletContext()
 						.getRequestDispatcher("/WEB-INF/views/404.html")
 						.forward(request, response);
+				return;
 			}
 			response.sendRedirect("Dashboard");
+			logger.info("doPost " + DO_GET_POST_SUCCEDED);
 		} else {
-			// TODO Log the error
+			logger.error("doPost " + DO_GET_POST_FORM_VALIDATION_PROBLEM);
 			this.getServletContext()
 					.getRequestDispatcher("/WEB-INF/views/404.html")
 					.forward(request, response);
