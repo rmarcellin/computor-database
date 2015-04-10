@@ -26,7 +26,7 @@ import com.excilys.computerdb.validators.ComputerValidator;
  * Servlet implementation class AddComputer
  */
 @WebServlet(description = "Adds a computer into database", urlPatterns = { "/AddComputer" })
-public class AddComputer extends HttpServlet {
+public class AddComputer extends SpringHttpServlet {
 	private static final long serialVersionUID = 1L;
 	
 	@Autowired

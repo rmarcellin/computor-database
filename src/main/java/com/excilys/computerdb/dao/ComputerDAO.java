@@ -26,7 +26,7 @@ public class ComputerDAO implements IComputerDAO {
 
 	/** The repository. */
 	@Autowired
-	private DAOFactory daoFactory;
+	private IDAOFactory daoFactory;
 
 	/** The Constant SQL_SELECT_ALL_COMPUTERS. */
 	private static final String SQL_SELECT_ALL_COMPUTERS = "SELECT * FROM computer";

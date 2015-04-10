@@ -25,7 +25,7 @@ import com.excilys.computerdb.exception.*;
  * Servlet implementation class SearchServlet
  */
 @WebServlet("/SearchServlet")
-public class SearchServlet extends HttpServlet {
+public class SearchServlet extends SpringHttpServlet {
 	private static final long serialVersionUID = 1L;
 	
 	private IComputerService computerService;

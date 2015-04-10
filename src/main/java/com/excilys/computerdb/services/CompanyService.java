@@ -15,7 +15,7 @@ import com.excilys.computerdb.model.*;
 public class CompanyService implements ICompanyService {
 	
 	@Autowired
-	private static ICompanyDAO companyDAO;
+	private ICompanyDAO companyDAO;
 	
 	private static final Logger logger = LoggerFactory.getLogger(CompanyService.class);
 	

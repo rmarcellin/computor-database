@@ -20,7 +20,7 @@ import com.excilys.computerdb.exception.*;
  * Servlet implementation class DeleteComputer
  */
 @WebServlet("/DeleteComputer")
-public class DeleteComputer extends HttpServlet {
+public class DeleteComputer extends SpringHttpServlet {
 	private static final long serialVersionUID = 1L;
 	
 	@Autowired

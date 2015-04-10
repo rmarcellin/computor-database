@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -18,8 +17,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.context.support.SpringBeanAutowiringSupport;
-
 import com.excilys.computerdb.dto.ComputerDTO;
 import com.excilys.computerdb.model.Computer;
 import com.excilys.computerdb.services.IComputerService;
@@ -30,19 +27,7 @@ import com.excilys.computerdb.utils.Util;
  * Servlet implementation class Dashboard
  */
 @WebServlet(description = "Gets all computers from database", urlPatterns = { "/Dashboard" })
-public class Dashboard extends HttpServlet {
-	
-	@Override
-	public void init(ServletConfig config) {
-	    try {
-			super.init(config);
-		} catch (ServletException e) {
-			e.printStackTrace();
-		}
-	    SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
-	  }
-	
-	
+public class Dashboard extends SpringHttpServlet {	
 	
 	@Autowired
 	private IComputerService computerService;

@@ -26,7 +26,7 @@ public class DAOFactory implements IDAOFactory {
 
 	@Autowired
 	@Qualifier("datasource")
-	BoneCPDataSource connectionPool;
+	private BoneCPDataSource connectionPool;
 	
 	private static final Logger logger = LoggerFactory.getLogger(DAOFactory.class);
 	private static final String CONNECTION_NUMBER = "Connection number : ";

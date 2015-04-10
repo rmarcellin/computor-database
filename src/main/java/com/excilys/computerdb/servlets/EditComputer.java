@@ -15,7 +15,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import com.excilys.computerdb.dto.CompanyDTO;
 import com.excilys.computerdb.dto.ComputerDTO;
 import com.excilys.computerdb.model.Company;
@@ -28,8 +27,9 @@ import com.excilys.computerdb.validators.ComputerValidator;
  * Servlet implementation class EditComputer
  */
 @WebServlet("/EditComputer")
-public class EditComputer extends HttpServlet {
+public class EditComputer extends SpringHttpServlet {
 	private static final long serialVersionUID = 1L;
+	
 	
 	@Autowired
 	private ICompanyService companyService;

@@ -12,5 +12,7 @@ public interface IDAOFactory {
 	 * @throws SQLException the SQL exception
 	 */
 	public abstract Connection getConnection() throws SQLException;
+	
+	public abstract void removeConnection();
 
 }
