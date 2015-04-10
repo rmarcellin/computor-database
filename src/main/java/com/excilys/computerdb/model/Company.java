@@ -1,4 +1,4 @@
-package com.excilys.computerdb.beans;
+package com.excilys.computerdb.model;
 
 /**
  * The Class Company.

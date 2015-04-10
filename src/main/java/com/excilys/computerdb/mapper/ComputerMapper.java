@@ -4,7 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 
-import com.excilys.computerdb.beans.Computer;
+import com.excilys.computerdb.model.Computer;
 import com.excilys.computerdb.utils.Util;
 
 public class ComputerMapper implements Mapper<Computer> {

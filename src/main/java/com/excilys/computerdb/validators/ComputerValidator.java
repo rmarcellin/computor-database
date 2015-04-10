@@ -22,7 +22,6 @@ public class ComputerValidator {
 	private static final String DISCO_NOT_VALID_DATE = "Invalid \"Discontinued\" date";
 
 	public static boolean isValide(ComputerDTO computer) {
-		// TODO Log errors
 
 		// COMPUTER NAME
 		if (computer == null) {

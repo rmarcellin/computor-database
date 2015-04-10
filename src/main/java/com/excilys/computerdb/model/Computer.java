@@ -1,4 +1,4 @@
-package com.excilys.computerdb.beans;
+package com.excilys.computerdb.model;
 
 import org.joda.time.LocalDate;
 

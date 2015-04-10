@@ -14,12 +14,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.excilys.computerdb.dto.*;
+import com.excilys.computerdb.model.*;
 import com.excilys.computerdb.services.*;
 import com.excilys.computerdb.utils.Util;
 import com.excilys.computerdb.validators.ComputerValidator;
-import com.excilys.computerdb.beans.*;
 
 /**
  * Servlet implementation class AddComputer
@@ -28,6 +29,14 @@ import com.excilys.computerdb.beans.*;
 public class AddComputer extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
+	@Autowired
+	private ICompanyService companyService;
+	@Autowired
+	private IComputerService computerService;
+	
+	/**
+	 * Logger initialisation
+	 */
 	private static final Logger logger = LoggerFactory.getLogger(AddComputer.class);
 	
 	/**
@@ -70,10 +79,9 @@ public class AddComputer extends HttpServlet {
 		ServletContext scxt = this.getServletContext();
 		// In the form, the user will have a dropdown list of all the companies
 		// present in the database
-		CompanyService cs = new CompanyService();
 		List<Company> listCompany = null;
 		try {
-			listCompany = cs.getCompanies();
+			listCompany = companyService.getCompanies();
 		} catch (SQLException e) {
 			logger.error("doGet " + DO_GET_POST_CONTEXT_FAILURE);
 			scxt.getRequestDispatcher("/WEB-INF/views/404.html").forward(
@@ -103,9 +111,8 @@ public class AddComputer extends HttpServlet {
 		// to the database using a computerDAO
 		if (ComputerValidator.isValide(c)) {
 			Computer computer = Util.fromDTOToComputer(c);
-			ComputerService compService = new ComputerService();
 			try {
-				compService.setComputer(computer);
+				computerService.setComputer(computer);
 			} catch (SQLException e) {
 				logger.error("doPost " + DO_GET_POST_CONTEXT_FAILURE);
 				this.getServletContext()

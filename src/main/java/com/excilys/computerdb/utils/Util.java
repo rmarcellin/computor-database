@@ -14,10 +14,10 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.joda.time.LocalDate;
 
-import com.excilys.computerdb.beans.*;
 import com.excilys.computerdb.dto.CompanyDTO;
 import com.excilys.computerdb.dto.ComputerDTO;
 import com.excilys.computerdb.exception.DAOException;
+import com.excilys.computerdb.model.*;
 /**
  * The Class Util.
  */
@@ -53,10 +53,10 @@ public class Util {
 	 *             the SQL exception
 	 * @pre conn != null p != null
 	 */
-	public static void closeRessources(Connection conn, PreparedStatement p,
+	public static void closeRessources(Connection connection, PreparedStatement p,
 			ResultSet resultSet) throws SQLException {
-		if (conn != null) {
-			conn.close();
+		if (connection != null) {
+			connection.close();
 		}
 		if (p != null) {
 			p.close();

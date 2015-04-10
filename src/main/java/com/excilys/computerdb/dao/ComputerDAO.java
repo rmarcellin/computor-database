@@ -10,18 +10,22 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
-import com.excilys.computerdb.beans.Computer;
 import com.excilys.computerdb.exception.DAOException;
 import com.excilys.computerdb.mapper.ComputerMapper;
+import com.excilys.computerdb.model.Computer;
 import com.excilys.computerdb.utils.Util;
 
 /**
  * The Class ComputerDAO.
  */
-public class ComputerDAO {
+@Repository
+public class ComputerDAO implements IComputerDAO {
 
 	/** The repository. */
+	@Autowired
 	private DAOFactory daoFactory;
 
 	/** The Constant SQL_SELECT_ALL_COMPUTERS. */
@@ -97,20 +101,16 @@ public class ComputerDAO {
 	 * @param daoFactory
 	 *            the repository dao
 	 */
+	@Autowired
 	public ComputerDAO(DAOFactory daoFactory) {
 		logger.info(CMPTDAO_STARTED);
 		this.daoFactory = daoFactory;
 	}
 
-	/**
-	 * Delete computer.
-	 *
-	 * @param compId
-	 *            the comp id
-	 * @return the computer
-	 * @throws SQLException
-	 *             the SQL exception
+	/* (non-Javadoc)
+	 * @see com.excilys.computerdb.dao.IComputerDAO#deleteComputer(long)
 	 */
+	@Override
 	public Computer deleteComputer(long compId) throws SQLException {
 		logger.info(compId + " : " + CMPTDAO_START_DELETE);
 		Connection connection = null;
@@ -135,23 +135,17 @@ public class ComputerDAO {
 			throw new DAOException(e);
 		} finally {
 			Util.closeRessources(connection, preparedStatement, null);
+			daoFactory.removeConnection();
 		}
 		logger.info(compId + " : " + CMPTDAO_DELETED);
 		return deletedComp;
 
 	}
 
-	/**
-	 * Update computer db.
-	 *
-	 * @param compId
-	 *            the comp id
-	 * @param values
-	 *            the values
-	 * @return the computer
-	 * @throws SQLException
-	 *             the SQL exception
+	/* (non-Javadoc)
+	 * @see com.excilys.computerdb.dao.IComputerDAO#updateComputer(com.excilys.computerdb.model.Computer)
 	 */
+	@Override
 	public void updateComputer(Computer computer) throws SQLException {
 		logger.info(computer.getName() + " : " + CMPTDAO_UPDATE_STARTED);
 		Connection connection = null;
@@ -183,18 +177,15 @@ public class ComputerDAO {
 			throw new DAOException(e);
 		} finally {
 			Util.closeRessources(connection, preparedStatement, null);
+			daoFactory.removeConnection();
 		}
 		logger.info(computer.getName() + " : " + CMPTDAO_UPDATED);
 	}
 
-	/**
-	 * Adds the computer to db.
-	 *
-	 * @param comp
-	 *            the comp
-	 * @throws SQLException
-	 *             the SQL exception
+	/* (non-Javadoc)
+	 * @see com.excilys.computerdb.dao.IComputerDAO#addComputer(com.excilys.computerdb.model.Computer)
 	 */
+	@Override
 	public void addComputer(Computer comp) throws SQLException {
 		logger.info(comp.getName() + " : " + CMPTDAO_ADD_STARTED);
 		Connection connection = null;
@@ -231,19 +222,15 @@ public class ComputerDAO {
 			throw new DAOException(e);
 		} finally {
 			Util.closeRessources(connection, preparedStatement, null);
+			daoFactory.removeConnection();
 		}
 		logger.info(comp.getName() + " : " + CMPTDAO_ADDED);
 	}
 
-	/**
-	 * Gets the computer by id.
-	 *
-	 * @param criteria
-	 *            the criteria
-	 * @return the computer by id
-	 * @throws SQLException
-	 *             the SQL exception
+	/* (non-Javadoc)
+	 * @see com.excilys.computerdb.dao.IComputerDAO#getComputerById(long)
 	 */
+	@Override
 	public Computer getComputerById(long criteria) throws SQLException {
 		logger.info(criteria + " : " + CMPTDAO_GET_STARTED);
 		Computer comp = null;
@@ -268,20 +255,16 @@ public class ComputerDAO {
 			throw new DAOException(e);
 		} finally {
 			Util.closeRessources(connection, preparedStatement, resultSet);
+			daoFactory.removeConnection();
 		}
 		logger.info(comp.getName() + " : " + CMPTDAO_FOUNDED);
 		return comp;
 	}
 
-	/**
-	 * Gets the computer by name.
-	 *
-	 * @param criteria
-	 *            the criteria
-	 * @return the computer by name
-	 * @throws SQLException
-	 *             the SQL exception
+	/* (non-Javadoc)
+	 * @see com.excilys.computerdb.dao.IComputerDAO#getComputerByName(java.lang.String)
 	 */
+	@Override
 	public Computer getComputerByName(String name) throws SQLException {
 		logger.info(name + " : " + CMPTDAO_GET_STARTED);
 		Computer comp = null;
@@ -306,18 +289,16 @@ public class ComputerDAO {
 			throw new DAOException(e);
 		} finally {
 			Util.closeRessources(connection, preparedStatement, resultSet);
+			daoFactory.removeConnection();
 		}
 		logger.info(name + " : " + CMPTDAO_FOUNDED);
 		return comp;
 	}
 
-	/**
-	 * Gets the computers.
-	 *
-	 * @return the computers
-	 * @throws SQLException
-	 *             the SQL exception
+	/* (non-Javadoc)
+	 * @see com.excilys.computerdb.dao.IComputerDAO#getComputers(java.lang.String, java.lang.String)
 	 */
+	@Override
 	public List<Computer> getComputers(String key, String sortOrder)
 			throws SQLException {
 		logger.info("All computers : " + CMPTDAO_GET_STARTED);
@@ -356,11 +337,16 @@ public class ComputerDAO {
 			throw new DAOException(e);
 		} finally {
 			Util.closeRessources(connection, preparedStatement, resultSet);
+			daoFactory.removeConnection();
 		}
 		logger.info("All computers : " + CMPTDAO_FOUNDED);
 		return listComp;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.excilys.computerdb.dao.IComputerDAO#getComputersSearched(java.lang.String)
+	 */
+	@Override
 	public List<Computer> getComputersSearched(String criteria)
 			throws SQLException {
 		logger.info(criteria + " : " + CMPTDAO_SEARCH_STARTED);
@@ -399,6 +385,7 @@ public class ComputerDAO {
 			throw new DAOException(e);
 		} finally {
 			Util.closeRessources(connection, preparedStatement, resultSet);
+			daoFactory.removeConnection();
 		}
 		logger.info("search : " + CMPTDAO_SEARCH_FOUNDED);
 		return listComp;

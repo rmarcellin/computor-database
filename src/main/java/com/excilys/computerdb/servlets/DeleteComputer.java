@@ -11,8 +11,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import com.excilys.computerdb.services.ComputerService;
+import com.excilys.computerdb.services.IComputerService;
 import com.excilys.computerdb.exception.*;
 
 /**
@@ -21,6 +22,9 @@ import com.excilys.computerdb.exception.*;
 @WebServlet("/DeleteComputer")
 public class DeleteComputer extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	
+	@Autowired
+	IComputerService computerService;
 	
 	private static final Logger logger = LoggerFactory.getLogger(DeleteComputer.class);
 	/**
@@ -50,7 +54,6 @@ public class DeleteComputer extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		logger.info("doPost " + DO_GET_POST_STARTED);
 		String id = request.getParameter("selection");
-		ComputerService computerService = new ComputerService();
 		try {
 			String[] ids = id.split(",");
 			for (String oneId : ids) {

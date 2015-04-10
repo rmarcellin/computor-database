@@ -9,19 +9,30 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
-import com.excilys.computerdb.beans.Company;
 import com.excilys.computerdb.mapper.CompanyMapper;
+import com.excilys.computerdb.model.Company;
 import com.excilys.computerdb.exception.DAOException;
 import com.excilys.computerdb.utils.Util;
 
 /**
  * The Class CompanyDAO.
  */
-public class CompanyDAO {
+@Repository("companyDAO")
+public class CompanyDAO implements ICompanyDAO {
 	
+	
+	
+	public CompanyDAO() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
 	/** The repository. */
-	private DAOFactory repository;
+	@Autowired
+	private IDAOFactory repository;
 	
 	/** The Constant SQL_SELECT_ALL_COMPANIES. */
 	private static final String SQL_SELECT_ALL_COMPANIES = "SELECT * FROM company";
@@ -54,11 +65,15 @@ public class CompanyDAO {
 	 *
 	 * @param daoFactory the repository dao
 	 */
-	public CompanyDAO(DAOFactory daoFactory) {
+	public CompanyDAO(IDAOFactory daoFactory) {
 		logger.info(CMPYDAO_STARTED);
 		this.repository = daoFactory;
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.excilys.computerdb.dao.ICompanyDAO#getCompanyIdByName(java.lang.String)
+	 */
+	@Override
 	public long getCompanyIdByName (String name) throws SQLException {
 		logger.info(name + " : " + CMPYDAO_GET_STARTED);
 		ResultSet resultSet = null;
@@ -82,12 +97,10 @@ public class CompanyDAO {
 		return id;
 	}
 	
-	/**
-	 * Gets the companies.
-	 *
-	 * @return the companies
-	 * @throws SQLException the SQL exception
+	/* (non-Javadoc)
+	 * @see com.excilys.computerdb.dao.ICompanyDAO#getCompanies()
 	 */
+	@Override
 	public List<Company> getCompanies() throws SQLException {
 		logger.info("All companies : " + CMPYDAO_GET_STARTED);
 		List<Company> companies = new ArrayList<>();
@@ -118,6 +131,10 @@ public class CompanyDAO {
 		return companies;
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.excilys.computerdb.dao.ICompanyDAO#getCompaniesSearched(java.lang.String)
+	 */
+	@Override
 	public List<Company> getCompaniesSearched(String criteria) throws SQLException {
 		logger.info(CMPYDAO_SEARCH_STARTED);
 		if (criteria == null || criteria.isEmpty()) {

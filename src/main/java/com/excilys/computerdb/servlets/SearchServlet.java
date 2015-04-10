@@ -14,9 +14,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.excilys.computerdb.beans.Computer;
 import com.excilys.computerdb.dto.ComputerDTO;
-import com.excilys.computerdb.services.ComputerService;
+import com.excilys.computerdb.model.Computer;
+import com.excilys.computerdb.services.IComputerService;
 import com.excilys.computerdb.ui.Page;
 import com.excilys.computerdb.utils.Util;
 import com.excilys.computerdb.exception.*;
@@ -27,6 +27,8 @@ import com.excilys.computerdb.exception.*;
 @WebServlet("/SearchServlet")
 public class SearchServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	
+	private IComputerService computerService;
 	
 	private static final Logger logger = LoggerFactory.getLogger(SearchServlet.class);
 	/**
@@ -64,10 +66,9 @@ public class SearchServlet extends HttpServlet {
 		if (criteria != null) {
 			String trimedCriteria = criteria.trim();
 			if (!trimedCriteria.isEmpty()) {
-				ComputerService cs = new ComputerService();
 				List<Computer> listComp = null;
 				try {
-					listComp = cs.getComputersSearched(trimedCriteria);
+					listComp = computerService.getComputersSearched(trimedCriteria);
 				} catch (SQLException e) {
 					logger.error("doGet " + DO_POST_SEARCH_FAILURE);
 					throw new DAOException("In search servlet");

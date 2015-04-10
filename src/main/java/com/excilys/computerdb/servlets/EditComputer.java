@@ -14,11 +14,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import com.excilys.computerdb.beans.Company;
-import com.excilys.computerdb.beans.Computer;
 import com.excilys.computerdb.dto.CompanyDTO;
 import com.excilys.computerdb.dto.ComputerDTO;
+import com.excilys.computerdb.model.Company;
+import com.excilys.computerdb.model.Computer;
 import com.excilys.computerdb.services.*;
 import com.excilys.computerdb.utils.Util;
 import com.excilys.computerdb.validators.ComputerValidator;
@@ -29,6 +30,11 @@ import com.excilys.computerdb.validators.ComputerValidator;
 @WebServlet("/EditComputer")
 public class EditComputer extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	
+	@Autowired
+	private ICompanyService companyService;
+	@Autowired
+	private IComputerService computerService;
 	
 	private static final Logger logger = LoggerFactory.getLogger(AddComputer.class);
 	/**
@@ -67,11 +73,10 @@ public class EditComputer extends HttpServlet {
 
 		// In the form, the user will have a dropdown list of all the companies
 		// present in the database
-		CompanyService cs = new CompanyService();
 		List<Company> listCompany = null;
 		try {
 			logger.info("doGet " + DO_GET_POST_DISPLAY_COMPANIES);
-			listCompany = cs.getCompanies();
+			listCompany = companyService.getCompanies();
 		} catch (SQLException e) {
 			logger.error("doGet " + DO_POST_EDIT_FAILURE);
 			scxt.getRequestDispatcher("/WEB-INF/views/404.html").forward(
@@ -111,9 +116,8 @@ public class EditComputer extends HttpServlet {
 		ComputerDTO dto = Util.getComputerDTOFromHttpServlet(request);
 		if (ComputerValidator.isValide(dto)) {
 			Computer computerBean = Util.fromDTOToComputer(dto);
-			ComputerService compService = new ComputerService();
 			try {
-				compService.updateComputer(computerBean);
+				computerService.updateComputer(computerBean);
 			} catch (SQLException e) {
 				logger.error("doPost " + DO_POST_EDIT_FAILURE);
 				this.getServletContext()

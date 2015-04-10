@@ -3,20 +3,28 @@ package com.excilys.computerdb.services;
 import java.sql.SQLException;
 import java.util.List;
 
-import com.excilys.computerdb.dao.*;
-import com.excilys.computerdb.beans.*;
-import com.excilys.computerdb.dao.DAOFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-public class CompanyService {
-	private static DAOFactory factory;
-	private static CompanyDAO companyDAO;
+import com.excilys.computerdb.dao.*;
+import com.excilys.computerdb.model.*;
+
+@Service
+public class CompanyService implements ICompanyService {
 	
-	public CompanyService() {
-		factory = DAOFactory.getInstance();
-		companyDAO = new CompanyDAO(factory);
-	}
+	@Autowired
+	private static ICompanyDAO companyDAO;
 	
+	private static final Logger logger = LoggerFactory.getLogger(CompanyService.class);
+	
+	/* (non-Javadoc)
+	 * @see com.excilys.computerdb.services.ICompanyService#getCompanies()
+	 */
+	@Override
 	public List<Company> getCompanies() throws SQLException {
+		logger.info("CompanyService.getCompanies called");
 		return companyDAO.getCompanies();
 	}
 

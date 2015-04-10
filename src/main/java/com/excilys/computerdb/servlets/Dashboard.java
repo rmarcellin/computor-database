@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,10 +17,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
-import com.excilys.computerdb.beans.Computer;
 import com.excilys.computerdb.dto.ComputerDTO;
-import com.excilys.computerdb.services.ComputerService;
+import com.excilys.computerdb.model.Computer;
+import com.excilys.computerdb.services.IComputerService;
 import com.excilys.computerdb.ui.Page;
 import com.excilys.computerdb.utils.Util;
 
@@ -28,6 +31,22 @@ import com.excilys.computerdb.utils.Util;
  */
 @WebServlet(description = "Gets all computers from database", urlPatterns = { "/Dashboard" })
 public class Dashboard extends HttpServlet {
+	
+	@Override
+	public void init(ServletConfig config) {
+	    try {
+			super.init(config);
+		} catch (ServletException e) {
+			e.printStackTrace();
+		}
+	    SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
+	  }
+	
+	
+	
+	@Autowired
+	private IComputerService computerService;
+	
 	private static final long serialVersionUID = 1L;
 	private static int PAGE_SIZE = 10;
 	private static final String MY_PAGE = "page";
@@ -72,7 +91,6 @@ public class Dashboard extends HttpServlet {
 		logger.info("doGet " + DO_GET_POST_STARTED);
 		ServletContext ctx = this.getServletContext();
 		List<Computer> computers = null;
-		ComputerService cs = new ComputerService();
 		try {
 			// Getting the column to be sorted and the order in witch it must be sorted
 			// sortKey corresponds to the column to be sorted
@@ -82,13 +100,13 @@ public class Dashboard extends HttpServlet {
 				boolean orderNotFound = true;
 				for (Map.Entry<String, String> entry : sortKeyOrder.entrySet()) {
 					if (!entry.getValue().equals("default")) {
-						computers = cs.getComputers(entry.getKey(), entry.getValue());
+						computers = computerService.getComputers(entry.getKey(), entry.getValue());
 						orderNotFound = false;
 						break;
 					}
 				}
 				if (orderNotFound) {
-					computers = cs.getComputers(null, null);
+					computers = computerService.getComputers(null, null);
 				}
 			} else {
 				String nextOrder = Util.getNextSortOrder(sortKeyOrder.get(sortKey));
@@ -96,7 +114,7 @@ public class Dashboard extends HttpServlet {
 					sortKeyOrder.replace(entry.getKey(), "default");
 				}
 				sortKeyOrder.replace(sortKey, nextOrder);
-				computers = cs.getComputers(sortKey, nextOrder);
+				computers = computerService.getComputers(sortKey, nextOrder);
 				//request.setAttribute("sortKey", sortKey);
 			}			
 		} catch (SQLException e) {
