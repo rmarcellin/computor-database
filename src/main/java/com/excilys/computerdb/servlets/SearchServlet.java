@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.excilys.computerdb.dto.ComputerDTO;
 import com.excilys.computerdb.model.Computer;
@@ -28,13 +29,14 @@ import com.excilys.computerdb.exception.*;
 public class SearchServlet extends SpringHttpServlet {
 	private static final long serialVersionUID = 1L;
 	
+	@Autowired
 	private IComputerService computerService;
 	
 	private static final Logger logger = LoggerFactory.getLogger(SearchServlet.class);
 	/**
 	 * INITIALISATION
 	 */
-	private static final String INITIALISATION = "AddComputer servlet called";
+	private static final String INITIALISATION = "SearchServlet servlet called";
 	
 	/**
 	 * doGet / doPost

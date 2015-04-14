@@ -96,7 +96,13 @@ public class Util {
 		String[] str = localDate.split("-");
 		int year = Integer.parseInt(str[0]);
 		int month = Integer.parseInt(str[1]);
-		int day = Integer.parseInt(str[2]);
+		int day;
+		if (!str[2].contains(":")) {
+			day = Integer.parseInt(str[2]);
+		} else {
+			String[] tmpDay = str[2].split(" ");
+			day = Integer.parseInt(tmpDay[0]);
+		}
 		
 		return new LocalDate(year, month, day);
 	}

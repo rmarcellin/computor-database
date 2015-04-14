@@ -16,7 +16,7 @@ public interface IComputerDAO {
 	 * @throws SQLException
 	 *             the SQL exception
 	 */
-	Computer deleteComputer(long compId) throws SQLException;
+	void deleteComputer(long compId) throws SQLException;
 
 	/**
 	 * Update computer db.

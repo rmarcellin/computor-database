@@ -103,7 +103,7 @@ public class AddComputer extends SpringHttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		logger.info("doPost " + DO_GET_POST_STARTED);
+		logger.info("AddComputer.doPost " + DO_GET_POST_STARTED);
 		// Getting the DTO from user's form
 		ComputerDTO c = Util.getComputerDTOFromHttpServlet(request);
 
@@ -114,15 +114,15 @@ public class AddComputer extends SpringHttpServlet {
 			try {
 				computerService.setComputer(computer);
 			} catch (SQLException e) {
-				logger.error("doPost " + DO_GET_POST_CONTEXT_FAILURE);
+				logger.error("AddComputer.doPost " + DO_GET_POST_CONTEXT_FAILURE);
 				this.getServletContext()
 						.getRequestDispatcher("/WEB-INF/views/404.html")
 						.forward(request, response);
 			}
 			response.sendRedirect("Dashboard");
-			logger.info("doPost " + DO_GET_POST_SUCCEDED);
+			logger.info("AddComputer.doPost " + DO_GET_POST_SUCCEDED);
 		} else {
-			logger.error("doGPost " + DO_GET_POST_CONTEXT_FAILURE);
+			logger.error("AddComputer.doGPost " + DO_GET_POST_CONTEXT_FAILURE);
 			this.getServletContext()
 					.getRequestDispatcher("/WEB-INF/views/404.html")
 					.forward(request, response);
