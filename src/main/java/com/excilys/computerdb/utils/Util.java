@@ -10,14 +10,13 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.joda.time.LocalDate;
 
 import com.excilys.computerdb.dto.CompanyDTO;
 import com.excilys.computerdb.dto.ComputerDTO;
 import com.excilys.computerdb.exception.DAOException;
-import com.excilys.computerdb.model.*;
+import com.excilys.computerdb.model.Company;
+import com.excilys.computerdb.model.Computer;
 /**
  * The Class Util.
  */
@@ -181,8 +180,7 @@ public class Util {
 				.getIntroduced()));
 		comp.setDiscontinued(Util.produceLocalDateFromString(computer
 				.getDiscontinued()));
-		comp.setCompanyId(computer.getCompanyId());
-		comp.setCompanyName(computer.getCompanyName());
+		comp.setCompany(new Company(computer.getCompanyId(), computer.getCompanyName()));
 		return comp;
 	}
 
@@ -200,8 +198,10 @@ public class Util {
 		} else {
 			comp.setDiscontinued(computer.getDiscontinued().toString());
 		}
-		comp.setCompanyId(computer.getCompanyId());
-		comp.setCompanyName(computer.getCompanyName());
+		if (computer.getCompany() != null) {
+			comp.setCompanyId(computer.getCompany().getId());
+			comp.setCompanyName(computer.getCompany().getName());
+		}
 		return comp;
 	}
 
@@ -209,8 +209,8 @@ public class Util {
 		return new CompanyDTO(company.getId(), company.getName());
 	}
 
-	public static ComputerDTO getComputerDTOFromHttpServlet(
-			HttpServletRequest request) {
+	/*public static ComputerDTO getComputerDTOFromModelMap(
+			ModelMap request) {
 		ComputerDTO computerDTO = new ComputerDTO();
 		String compId = request.getParameter("id");
 		if (compId != null) {
@@ -222,7 +222,7 @@ public class Util {
 		computerDTO.setCompanyId(Long.parseLong(request.getParameter("companyId")));
 
 		return computerDTO;
-	}
+	}*/
 	
 	public static String getNextSortOrder (String currentOrder) {
 		if (currentOrder == null) {

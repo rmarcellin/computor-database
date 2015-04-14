@@ -6,7 +6,7 @@ import java.sql.Timestamp;
 
 import org.springframework.jdbc.core.RowMapper;
 
-import com.excilys.computerdb.model.Computer;
+import com.excilys.computerdb.model.*;
 import com.excilys.computerdb.utils.Util;
 
 public class ComputerMapper implements RowMapper<Computer> {
@@ -15,6 +15,7 @@ public class ComputerMapper implements RowMapper<Computer> {
 	private static final String COMP_INTRO = "introduced";
 	private static final String COMP_DISCO = "discontinued";
 	private static final String COMP_COMPANY_ID = "company_id";
+	private static final String COMPA_NAME = "compa.name";
 
 	@Override
 	public Computer mapRow(ResultSet resultSet, int arg1) throws SQLException {
@@ -27,7 +28,14 @@ public class ComputerMapper implements RowMapper<Computer> {
 		Timestamp tmp2 = resultSet.getTimestamp(COMP_DISCO);
 		computer.setDiscontinued(Util.getLocalDateFromTimestamp(tmp2));
 
-		computer.setCompanyId(resultSet.getLong(COMP_COMPANY_ID));
+		final long companyId = resultSet.getLong(COMP_COMPANY_ID);
+		if (companyId != 0) {
+			Company company = new Company();
+			company.setId(companyId);
+			company.setName(resultSet.getString(COMPA_NAME));
+			computer.setCompany(company);
+		}
+		
 		return computer;
 	}
 }

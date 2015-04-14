@@ -20,139 +20,71 @@ public class Computer {
 	private LocalDate discontinued;
 	
 	/** The company id. */
-	private long companyId;
-	
-	private String companyName;
+	private Company company;
 	
 	/**
 	 * Instantiates a new computer.
 	 */
 	public Computer() {}
-	 
-	/**
-	 * Instantiates a new computer.
-	 *
-	 * @param id the id of the new computer
-	 * @param name the name of the new computer
-	 * @param introduced the introduced of the new computer
-	 * @param discontinued the discontinued of the new computer
-	 * @param companyId the company id of the new computer
-	 */
-	public Computer(long id, String name, LocalDate introduced, LocalDate discontinued,
-			long companyId) {
+	
+	
+
+	public Computer(long id, String name, LocalDate introduced,
+			LocalDate discontinued, Company company) {
 		this.id = id;
 		this.name = name;
 		this.introduced = introduced;
 		this.discontinued = discontinued;
-		this.companyId = companyId;
-		this.companyName = "";
+		this.company = company;
 	}
 
-	/**
-	 * Gets the id.
-	 *
-	 * @return the id
-	 */
+
+
 	public long getId() {
 		return id;
 	}
 
-	/**
-	 * Gets the name.
-	 *
-	 * @return the name
-	 */
 	public String getName() {
 		return name;
 	}
 
-	/**
-	 * Gets the introduced.
-	 *
-	 * @return the introduced
-	 */
 	public LocalDate getIntroduced() {
 		return introduced;
 	}
 
-	/**
-	 * Gets the discontinued.
-	 *
-	 * @return the discontinued
-	 */
 	public LocalDate getDiscontinued() {
 		return discontinued;
 	}
 
-	/**
-	 * Gets the company id.
-	 *
-	 * @return the company id
-	 */
-	public long getCompanyId() {
-		return companyId;
-	}
-	
-	public String getCompanyName() {
-		return companyName;
+	public Company getCompany() {
+		return company;
 	}
 
-	/**
-	 * Sets the id.
-	 *
-	 * @param id the new id
-	 */
 	public void setId(long id) {
 		this.id = id;
 	}
 
-	/**
-	 * Sets the name.
-	 *
-	 * @param name the new name
-	 */
 	public void setName(String name) {
 		this.name = name;
 	}
 
-	/**
-	 * Sets the introduced.
-	 *
-	 * @param introduced the new introduced
-	 */
 	public void setIntroduced(LocalDate introduced) {
 		this.introduced = introduced;
 	}
 
-	/**
-	 * Sets the discontinued.
-	 *
-	 * @param discontinued the new discontinued
-	 */
 	public void setDiscontinued(LocalDate discontinued) {
 		this.discontinued = discontinued;
 	}
 
-	/**
-	 * Sets the company id.
-	 *
-	 * @param companyId the new company id
-	 */
-	public void setCompanyId(long companyId) {
-		this.companyId = companyId;
-	}
-	
-	public void setCompanyName(String name) {
-		this.companyName = name;
+	public void setCompany(Company company) {
+		this.company = company;
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + (int) (companyId ^ (companyId >>> 32));
-		result = prime * result
-				+ ((companyName == null) ? 0 : companyName.hashCode());
+		result = prime * result + ((company == null) ? 0 : company.hashCode());
 		result = prime * result
 				+ ((discontinued == null) ? 0 : discontinued.hashCode());
 		result = prime * result + (int) (id ^ (id >>> 32));
@@ -174,14 +106,11 @@ public class Computer {
 			return false;
 		}
 		Computer other = (Computer) obj;
-		if (companyId != other.companyId) {
-			return false;
-		}
-		if (companyName == null) {
-			if (other.companyName != null) {
+		if (company == null) {
+			if (other.company != null) {
 				return false;
 			}
-		} else if (!companyName.equals(other.companyName)) {
+		} else if (!company.equals(other.company)) {
 			return false;
 		}
 		if (discontinued == null) {
@@ -211,16 +140,16 @@ public class Computer {
 		return true;
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
 	@Override
 	public String toString() {
-		return "[id = " + id + ", "
-				+ (name != null ? "Computer : " + name + ", " : "") 
-				+ " introduced : " + introduced + ", discontinued : " 
-				+ discontinued + ", company : " + companyName + "]";
-	}	 
-	 	
-
+		return "Computer [id="
+				+ id
+				+ ", "
+				+ (name != null ? "name=" + name + ", " : "")
+				+ (introduced != null ? "introduced=" + introduced + ", " : "")
+				+ (discontinued != null ? "discontinued=" + discontinued + ", "
+						: "") + (company != null ? "company=" + company : "")
+				+ "]";
+	}	
+	
 }

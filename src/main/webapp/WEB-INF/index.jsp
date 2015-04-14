@@ -16,5 +16,7 @@
 	</c:if>	
 	<a href="WEB-INF/views/dashboard.html">Try me</a>
 	
+	<p> ${message}</p>
+	
 </body>
 </html>

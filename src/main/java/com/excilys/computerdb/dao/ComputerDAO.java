@@ -32,6 +32,15 @@ public class ComputerDAO implements IComputerDAO {
 	private IDAOFactory daoFactory;
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
+	
+	private final String SQL = "SELECT "
+			+ "compu.id, "
+			+ "compu.name, "
+			+ "compu.introduced, "
+			+ "compu.discontinued, "
+			+ "compu.company_id, "
+			+ "compa.name "
+			+ "FROM computer compu LEFT OUTER JOIN company compa ON compu.company_id = compa.id";
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(ComputerDAO.class);
@@ -126,8 +135,8 @@ public class ComputerDAO implements IComputerDAO {
 					ps.setNull(3, Types.TIMESTAMP);
 				}
 
-				if (computer.getCompanyId() != 0) {
-					ps.setLong(4, computer.getCompanyId());
+				if (computer.getCompany().getId() != 0) {
+					ps.setLong(4, computer.getCompany().getId());
 				} else {
 					ps.setNull(4, Types.LONGVARCHAR);
 				}
@@ -183,8 +192,8 @@ public class ComputerDAO implements IComputerDAO {
 			@Override
 			public PreparedStatement createPreparedStatement(
 					Connection connection) throws SQLException {
-				PreparedStatement ps = connection
-						.prepareStatement(SQL_CREATE_COMPUTER, new String[] { "id" });
+				PreparedStatement ps = connection.prepareStatement(
+						SQL_CREATE_COMPUTER, new String[] { "id" });
 
 				ps.setString(1, name);
 
@@ -204,8 +213,8 @@ public class ComputerDAO implements IComputerDAO {
 					ps.setNull(3, Types.TIMESTAMP);
 				}
 
-				if (comp.getCompanyId() != 0) {
-					ps.setLong(4, comp.getCompanyId());
+				if (comp.getCompany().getId() != 0) {
+					ps.setLong(4, comp.getCompany().getId());
 				} else {
 					ps.setNull(4, Types.LONGVARCHAR);
 				}
@@ -306,15 +315,13 @@ public class ComputerDAO implements IComputerDAO {
 		logger.info("ComputerDAO.getComputers called - Arguments : {}, {}",
 				key, sortOrder);
 		List<Computer> listComp = null;
-
+		
 		if (key == null || sortOrder == null) {
-			final String SQL_SELECT_ALL_COMPUTERS = "SELECT * FROM computer";
-			listComp = jdbcTemplate.query(SQL_SELECT_ALL_COMPUTERS,
+			listComp = jdbcTemplate.query(SQL,
 					new ComputerMapper());
 		} else {
-			final String SQL_SELECT_ALL_COMPUTERS_SORTED = "SELECT * FROM computer ORDER BY "
-					+ key + " " + sortOrder;
-			listComp = jdbcTemplate.query(SQL_SELECT_ALL_COMPUTERS_SORTED,
+			final String SQL_SORTED = SQL + " ORDER BY compu." + key + " " + sortOrder;
+			listComp = jdbcTemplate.query(SQL_SORTED,
 					new ComputerMapper());
 		}
 		// Removing the current connection from the ThreadLocal
@@ -344,11 +351,10 @@ public class ComputerDAO implements IComputerDAO {
 		}
 		List<Computer> listComp = new ArrayList<>();
 
-		final String SQL_SEARCH_COMPUTERS = "SELECT * FROM computer LEFT OUTER JOIN company "
-				+ "ON computer.company_id = company.id WHERE UCASE(computer.name) "
-				+ "LIKE ? or UCASE(company.name) LIKE ?";
+		final String SQL_SEARCH = SQL + " WHERE UCASE(compu.name) "
+				+ "LIKE ? or UCASE(compa.name) LIKE ?";
 
-		listComp = jdbcTemplate.query(SQL_SEARCH_COMPUTERS, new Object[] {
+		listComp = jdbcTemplate.query(SQL_SEARCH, new Object[] {
 				"%" + criteria + "%", "%" + criteria + "%" },
 				new ComputerMapper());
 

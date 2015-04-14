@@ -5,9 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,6 +13,13 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import com.excilys.computerdb.dto.CompanyDTO;
 import com.excilys.computerdb.dto.ComputerDTO;
 import com.excilys.computerdb.model.Company;
@@ -26,22 +31,22 @@ import com.excilys.computerdb.validators.ComputerValidator;
 /**
  * Servlet implementation class EditComputer
  */
-@WebServlet("/EditComputer")
-public class EditComputer extends SpringHttpServlet {
-	private static final long serialVersionUID = 1L;
-	
-	
+@Controller
+@RequestMapping("/EditComputer")
+public class EditComputer {
+
 	@Autowired
 	private ICompanyService companyService;
 	@Autowired
 	private IComputerService computerService;
-	
-	private static final Logger logger = LoggerFactory.getLogger(AddComputer.class);
+
+	private static final Logger logger = LoggerFactory
+			.getLogger(AddComputer.class);
 	/**
 	 * INITIALISATION
 	 */
 	private static final String INITIALISATION = "AddComputer servlet called";
-	
+
 	/**
 	 * doGet / doPost
 	 */
@@ -50,9 +55,8 @@ public class EditComputer extends SpringHttpServlet {
 	private static final String DO_GET_POST_DISPLAY_COMPANIES = "Retrieving companies to be displayed";
 	private static final String DO_POST_EDIT_FAILURE = "edit problem occured";
 	private static final String DO_GET_POST_FORM_VALIDATION_PROBLEM = "form validation problem";
-	
-	private static final String EDIT_COMPUTER_SERVLET_CALLED = 
-			"Edit computer servlet called";
+
+	private static final String EDIT_COMPUTER_SERVLET_CALLED = "Edit computer servlet called";
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -66,10 +70,16 @@ public class EditComputer extends SpringHttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
-	protected void doGet(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
+	@RequestMapping(method = RequestMethod.GET)
+	protected String doGet(
+			ModelMap model,
+			@RequestParam(value = "id", required = false) final long id,
+			@RequestParam(value = "name", required = true) final String name,
+			@RequestParam(value = "intro", required = false) final String intro,
+			@RequestParam(value = "disco", required = false) final String disco,
+			@RequestParam(value = "companyName", required = false) final String companyName)
+			throws ServletException, IOException {
 		logger.info(EDIT_COMPUTER_SERVLET_CALLED);
-		ServletContext scxt = this.getServletContext();
 
 		// In the form, the user will have a dropdown list of all the companies
 		// present in the database
@@ -79,59 +89,49 @@ public class EditComputer extends SpringHttpServlet {
 			listCompany = companyService.getCompanies();
 		} catch (SQLException e) {
 			logger.error("doGet " + DO_POST_EDIT_FAILURE);
-			scxt.getRequestDispatcher("/WEB-INF/views/404.html").forward(
-					request, response);
+			return "redirect:404";
 		}
 		List<CompanyDTO> companiesDTO = new ArrayList<>();
 		for (Company comp : listCompany) {
 			companiesDTO.add(Util.fromCompanyToDTO(comp));
 		}
-		request.setAttribute("companies", companiesDTO);
+		model.addAttribute("companies", companiesDTO);
 
 		// /////////////////////////////
-		String id = request.getParameter("id");
-		String name = request.getParameter("name");
-		String intro = request.getParameter("intro");
-		String disco = request.getParameter("disco");
-		String companyN = request.getParameter("companyName");
+		model.addAttribute("id", id);
+		model.addAttribute("name", name);
+		model.addAttribute("intro", intro);
+		model.addAttribute("disco", disco);
+		model.addAttribute("companyName", companyName);
 
-		request.setAttribute("id", id);
-		request.setAttribute("name", name);
-		request.setAttribute("intro", intro);
-		request.setAttribute("disco", disco);
-		request.setAttribute("companyName", companyN);
-
-		scxt.getRequestDispatcher("/WEB-INF/views/editComputer.jsp").forward(
-				request, response);
 		logger.info("doGet " + DO_GET_POST_SUCCEDED);
+		return "editComputer";
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
+	@RequestMapping(method = RequestMethod.POST)
+	protected String doPost(ModelMap model,
+			@ModelAttribute("computerForm") final ComputerDTO computerDTO)
+			throws ServletException, IOException {
 		logger.info("doPost " + DO_GET_POST_STARTED);
-		ComputerDTO dto = Util.getComputerDTOFromHttpServlet(request);
-		if (ComputerValidator.isValide(dto)) {
-			Computer computerBean = Util.fromDTOToComputer(dto);
+		
+		if (ComputerValidator.isValide(computerDTO)) {
+			Computer computer = Util.fromDTOToComputer(computerDTO);
 			try {
-				computerService.updateComputer(computerBean);
+				computerService.updateComputer(computer);
 			} catch (SQLException e) {
 				logger.error("doPost " + DO_POST_EDIT_FAILURE);
-				this.getServletContext()
-						.getRequestDispatcher("/WEB-INF/views/404.html")
-						.forward(request, response);
-				return;
+				return "redirect:404";
 			}
-			response.sendRedirect("Dashboard");
 			logger.info("doPost " + DO_GET_POST_SUCCEDED);
+			return "redirect:Dashboard";
+			
 		} else {
 			logger.error("doPost " + DO_GET_POST_FORM_VALIDATION_PROBLEM);
-			this.getServletContext()
-					.getRequestDispatcher("/WEB-INF/views/404.html")
-					.forward(request, response);
+			return "redirect:404";
 		}
 
 	}
