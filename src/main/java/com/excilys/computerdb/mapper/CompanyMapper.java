@@ -3,18 +3,18 @@ package com.excilys.computerdb.mapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.springframework.jdbc.core.RowMapper;
+
 import com.excilys.computerdb.model.Company;
 
-public class CompanyMapper implements Mapper<Company> {
+public class CompanyMapper implements RowMapper<Company> {
 
-	public Company mapResultSet(ResultSet resultSet) throws SQLException {
-		if (resultSet == null) {
-			throw new IllegalArgumentException();
-		}
-		final Company c = new Company();
-		c.setId(resultSet.getLong("id"));
-		c.setName(resultSet.getString("name"));
-		return c;
+	@Override
+	public Company mapRow(ResultSet resultSet, int arg1) throws SQLException {
+		final Company company = new Company();
+		company.setId(resultSet.getLong("id"));
+		company.setName(resultSet.getString("name"));
+		return company;
 	}
 
 }

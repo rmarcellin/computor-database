@@ -1,172 +1,140 @@
 package com.excilys.computerdb.dao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.excilys.computerdb.mapper.CompanyMapper;
 import com.excilys.computerdb.model.Company;
-import com.excilys.computerdb.exception.DAOException;
-import com.excilys.computerdb.utils.Util;
 
 /**
  * The Class CompanyDAO.
  */
 @Repository("companyDAO")
 public class CompanyDAO implements ICompanyDAO {
-	
-	
-	
-	public CompanyDAO() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
 
+	@Autowired
+	private JdbcTemplate jdbcTemplate;
 	/** The repository. */
 	@Autowired
-	private IDAOFactory repository;
-	
-	/** The Constant SQL_SELECT_ALL_COMPANIES. */
-	private static final String SQL_SELECT_ALL_COMPANIES = "SELECT * FROM company";
-	private static final String SQL_SELECT_BY_NAME = "SELECT * FROM company WHERE name = ?";
-	private static final String SQL_SEARCH_COMPANIES = "SELECT * FROM company WHERE name LIKE '% ? %'";
-	
-	private static final Logger logger = LoggerFactory.getLogger(CompanyDAO.class);
-	
+	private IDAOFactory daoFactory;
+
+	public CompanyDAO() {
+		super();
+	}
+
+	private static final Logger logger = LoggerFactory
+			.getLogger(CompanyDAO.class);
+
 	/**
-	 * INSTATIATION
+	 * INSTATIATION MSG
 	 */
 	private static final String CMPYDAO_STARTED = "CompanyDAO called";
-	
-	/**
-	 * COMPANYDAO GETTING METHOD
-	 */
-	private static final String CMPYDAO_GET_STARTED = "Company get started";
-	private static final String CMPYDAO_GET_FAILURE = "Company get failed";
-	private static final String CMPYDAO_FOUNDED = "Company founded successifuly";
-	
-	/**
-	 * COMPANYDAO SEARCHING METHOD
-	 */
-	private static final String CMPYDAO_SEARCH_STARTED = "Company search started";
-	private static final String CMPYDAO_SEARCH_FAILURE = "Company search failed";
-	private static final String CMPYDAO_SEARCH_FOUNDED = "Company searched successifuly";
 
 	/**
 	 * Instantiates a new company dao.
 	 *
-	 * @param daoFactory the repository dao
+	 * @param daoFactory
+	 *            the repository dao
 	 */
 	public CompanyDAO(IDAOFactory daoFactory) {
 		logger.info(CMPYDAO_STARTED);
-		this.repository = daoFactory;
+		this.daoFactory = daoFactory;
 	}
-	
-	/* (non-Javadoc)
-	 * @see com.excilys.computerdb.dao.ICompanyDAO#getCompanyIdByName(java.lang.String)
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.excilys.computerdb.dao.ICompanyDAO#getCompanyIdByName(java.lang.String
+	 * )
 	 */
 	@Override
-	public long getCompanyIdByName (String name) throws SQLException {
-		logger.info(name + " : " + CMPYDAO_GET_STARTED);
-		ResultSet resultSet = null;
-		Connection connection = null;
-		PreparedStatement preparedStatement = null;
-		long id;
-		try {
-			connection = repository.getConnection();
-			preparedStatement = connection.prepareStatement(SQL_SELECT_BY_NAME);
-			preparedStatement.setString(1, name);
-			resultSet = preparedStatement.executeQuery();
-			resultSet.next();
-			id = new CompanyMapper().mapResultSet(resultSet).getId();			
-		} catch (SQLException e) {
-			logger.error(name + " : " + CMPYDAO_GET_FAILURE);
-			throw new DAOException(e);
-		} finally {
-			Util.closeRessources(connection, preparedStatement, resultSet);
+	public Company getCompanyIdByName(String name) throws SQLException {
+		logger.info("CompanyDAO.getCompanyIdByName called - Argument : {}",
+				name);
+		if (name == null) {
+			logger.error("CompanyDAO.getCompanyIdByName - name null");
+			throw new IllegalArgumentException();
 		}
-		logger.info(name + " : " + CMPYDAO_FOUNDED);
-		return id;
+
+		String tmpName = name.trim();
+		if (tmpName.isEmpty()) {
+			logger.error("CompanyDAO.getCompanyIdByName - name empty");
+			throw new IllegalArgumentException();
+		}
+
+		final String SQL_SELECT_BY_NAME = "SELECT * FROM company WHERE name = "
+				+ tmpName;
+		Company company = jdbcTemplate.query(SQL_SELECT_BY_NAME,
+				new CompanyMapper()).get(0);
+
+		// Removing the current connection from the ThreadLocal
+		daoFactory.removeConnection();
+
+		logger.info(
+				"CompanyDAO.getCompanyIdByName \"{}\"retrieved successifuly",
+				company.getName());
+
+		return company;
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.excilys.computerdb.dao.ICompanyDAO#getCompanies()
 	 */
 	@Override
 	public List<Company> getCompanies() throws SQLException {
-		logger.info("All companies : " + CMPYDAO_GET_STARTED);
-		List<Company> companies = new ArrayList<>();
-		Company company = null;
-		ResultSet resultSet = null;
-		Connection connection = null;
-		PreparedStatement preparedStatement = null;
-		
-		try {
-			connection = repository.getConnection();
-			preparedStatement = connection.prepareStatement(SQL_SELECT_ALL_COMPANIES);
-			resultSet = preparedStatement.executeQuery();
-			
-			while (resultSet.next()) {
-				company = new Company();
-				company.setId(resultSet.getLong("id"));
-				company.setName(resultSet.getString("name"));
-				companies.add(company);
-			}
-			
-		} catch (SQLException e) {
-			logger.error("All companies : " + CMPYDAO_GET_FAILURE);
-			throw new DAOException(e);
-		} finally {
-			Util.closeRessources(connection, preparedStatement, resultSet);
-		}
-		logger.info("All companies : " + CMPYDAO_FOUNDED);
+		logger.info("CompanyDAO.getCompanies called");
+		List<Company> companies = null;
+		final String SQL_SELECT_ALL_COMPANIES = "SELECT * FROM company";
+		companies = jdbcTemplate.query(SQL_SELECT_ALL_COMPANIES,
+				new CompanyMapper());
+
+		// Removing the current connection from the ThreadLocal
+		daoFactory.removeConnection();
+
+		logger.info("CompanyDAO.getCompanies : All companies retrieved successifuly");
 		return companies;
 	}
-	
-	/* (non-Javadoc)
-	 * @see com.excilys.computerdb.dao.ICompanyDAO#getCompaniesSearched(java.lang.String)
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.excilys.computerdb.dao.ICompanyDAO#getCompaniesSearched(java.lang
+	 * .String)
 	 */
 	@Override
-	public List<Company> getCompaniesSearched(String criteria) throws SQLException {
-		logger.info(CMPYDAO_SEARCH_STARTED);
-		if (criteria == null || criteria.isEmpty()) {
+	public List<Company> getCompaniesSearched(String criteria)
+			throws SQLException {
+		logger.info("CompanyDAO.getCompaniesSearched called");
+		if (criteria == null) {
+			logger.error("CompanyDAO.getCompaniesSearched : creteria null");
 			return null;
 		}
-		
-		List<Company> companies = new ArrayList<>();
-		Company company = null;
-		ResultSet resultSet = null;
-		Connection connection = null;
-		PreparedStatement preparedStatement = null;
-		
-		try {
-			connection = repository.getConnection();
-			preparedStatement = connection.prepareStatement(SQL_SEARCH_COMPANIES);
-			preparedStatement.setString(1, criteria);
-			resultSet = preparedStatement.executeQuery();
-			
-			while (resultSet.next()) {
-				company = new Company();
-				company.setId(resultSet.getLong("id"));
-				company.setName(resultSet.getString("name"));
-				companies.add(company);
-			}
-			
-		} catch (SQLException e) {
-			logger.error(criteria + " : " + CMPYDAO_SEARCH_FAILURE);
-			throw new DAOException(e);
-		} finally {
-			Util.closeRessources(connection, preparedStatement, resultSet);
+
+		String tmpCriteria = criteria.trim();
+		if (tmpCriteria.isEmpty()) {
+			logger.error("CompanyDAO.getCompaniesSearched : creteria empty");
+			return null;
 		}
-		logger.info("All companies : " + CMPYDAO_SEARCH_FOUNDED);
+
+		final String SQL_SEARCH_COMPANIES = "SELECT * FROM company WHERE UCASE(name) LIKE ?";
+		List<Company> companies = jdbcTemplate.query(SQL_SEARCH_COMPANIES,
+				new Object[] {"%" + tmpCriteria + "%"}, new CompanyMapper());
+		
+		// Removing the current connection from the ThreadLocal
+		daoFactory.removeConnection();
+		
+		logger.info("CompanyDAO.getCompaniesSearched : All companies retrieved successifuly");
+
 		return companies;
 	}
 }

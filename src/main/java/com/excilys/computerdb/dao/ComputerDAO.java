@@ -184,7 +184,7 @@ public class ComputerDAO implements IComputerDAO {
 			public PreparedStatement createPreparedStatement(
 					Connection connection) throws SQLException {
 				PreparedStatement ps = connection
-						.prepareStatement(SQL_CREATE_COMPUTER);
+						.prepareStatement(SQL_CREATE_COMPUTER, new String[] { "id" });
 
 				ps.setString(1, name);
 
