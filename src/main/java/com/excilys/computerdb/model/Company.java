@@ -1,14 +1,24 @@
 package com.excilys.computerdb.model;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.NotEmpty;
+
 /**
  * The Class Company.
  */
 public class Company {
 	
 	/** The id. */
+	@Min(1)
 	private long id;
 	
 	/** The name. */
+	@NotNull
+	@NotEmpty
+	@Size(min = 2)
 	private String name;
 	
 	/**

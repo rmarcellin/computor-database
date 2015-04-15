@@ -11,6 +11,13 @@
 <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
 <link href="css/font-awesome.css" rel="stylesheet" media="screen">
 <link href="css/main.css" rel="stylesheet" media="screen">
+<style>
+	.error {
+	    color: #ff0000;
+	    font-style: italic;
+	    font-weight: bold;
+	}
+</style>
 </head>
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
@@ -30,29 +37,33 @@
 					<h1>Edit Computer</h1>
 
 					<form:form modelAttribute="computerForm" action="EditComputer" method="POST">
-						<input type="hidden" id="id" name="id" value="${ id }" />
+						<input type="hidden" id="id" name="id" value="${ computerDTO.id }" />
 						<fieldset>
 							<div class="form-group">
-								<label for="computerName">Computer name</label> <input
-									type="text" class="form-control" id="computerName" name="name"
-									placeholder="Computer name" value="${ name }">
+								<label for="computerName">Computer name</label> 
+								<input type="text" class="form-control" id="computerName" name="name"
+									placeholder="Computer name" value="${ computerDTO.name }">
+								<form:errors path="name" cssClass="error"/>
 							</div>
 							<div class="form-group">
-								<label for="introduced">Introduced date</label> <input
+								<label for="introduced">Introduced date</label> 
+								<input
 									type="date" class="form-control" id="introduced" name="introduced"
 									placeholder="Introduced date"
-									value="${ intro }">
+									value="${ computerDTO.introduced }">
+								<form:errors path="introduced" cssClass="error"/>
 							</div>
 							<div class="form-group">
 								<label for="discontinued">Discontinued date</label> <input
 									type="date" class="form-control" id="discontinued" name="discontinued"
 									placeholder="Discontinued date"
-									value="${ disco }">
+									value="${ computerDTO.discontinued }">
+								<form:errors path="discontinued" cssClass="error"/>
 							</div>
 							<div class="form-group">
 								<label for="companyId">Company</label> 
 								<select class="form-control" id="companyId" name="companyId">
-									<option value="0">--</option>
+									<option value="0"><c:out value="${ computerDTO.companyName }" /></option>
 									<c:forEach var="company" items="${ companies }">
                                     	<option value="${ company.id }">
                                     		<c:out value="${ company.name }" />

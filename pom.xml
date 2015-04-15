@@ -18,6 +18,8 @@
 		<logback-classic.version>1.1.2</logback-classic.version>
 		<bonecp.version>0.8.0.RELEASE</bonecp.version>
 		<spring.version>4.1.6.RELEASE</spring.version>
+		<javax.validation.version>1.1.0.Final</javax.validation.version>
+		<hibernate-validator.version>5.1.3.Final</hibernate-validator.version>
 	</properties>
 
 	<!-- DEPENDENCIES -->
@@ -105,8 +107,19 @@
 			<artifactId>spring-webmvc</artifactId>
 			<version>${spring.version}</version>
 		</dependency>
+		<!-- BEAN VALIDATION -->
+		<dependency>
+			<groupId>javax.validation</groupId>
+			<artifactId>validation-api</artifactId>
+			<version>${javax.validation.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>${hibernate-validator.version}</version>
+		</dependency>
 		
-
+		
 
 	</dependencies>
 

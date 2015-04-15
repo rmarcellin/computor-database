@@ -12,6 +12,13 @@
 <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
 <link href="css/font-awesome.css" rel="stylesheet" media="screen">
 <link href="css/main.css" rel="stylesheet" media="screen">
+<style>
+	.error {
+	    color: #ff0000;
+	    font-style: italic;
+	    font-weight: bold;
+	}
+</style>
 </head>
 <body>
     <header class="navbar navbar-inverse navbar-fixed-top">
@@ -31,14 +38,17 @@
                             <div class="form-group">
                                 <label for="computerName">Computer name</label>
                                 <input type="text" class="form-control" id="computerName" name="name" placeholder="Computer name">
+                                <form:errors path="name" cssClass="error"/>
                             </div>
                             <div class="form-group">
                                 <label for="introduced">Introduced date</label>
                                 <input type="date" class="form-control" id="introduced" name="introduced" placeholder="Introduced date">
+                                <form:errors path="introduced" cssClass="error"/>
                             </div>
                             <div class="form-group">
                                 <label for="discontinued">Discontinued date</label>
                                 <input type="date" class="form-control" id="discontinued" name="discontinued" placeholder="Discontinued date">
+                                <form:errors path="discontinued" cssClass="error"/>
                             </div>
                             <div class="form-group">
                                 <label for="companyId">Company</label>

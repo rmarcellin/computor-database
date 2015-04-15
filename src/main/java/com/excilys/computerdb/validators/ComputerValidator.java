@@ -7,75 +7,23 @@ import java.util.List;
 import org.joda.time.LocalDate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.validation.Errors;
+import org.springframework.validation.ValidationUtils;
+import org.springframework.validation.Validator;
 
 import com.excilys.computerdb.dto.ComputerDTO;
-import com.excilys.computerdb.utils.*;
+import com.excilys.computerdb.utils.Util;
 
-public class ComputerValidator {
+public class ComputerValidator implements Validator {
 	private static Logger logger = LoggerFactory.getLogger(ComputerValidator.class);
 	
-	private static final String COMPUTER_NULL = "Computer object null";
-	private static final String COMPUTER_NAME_EMPTY = "Computer name empty";
-	private static final String COMPUTER_NAME_NULL = "Computer name null";
-	private static final String COMPUTER_NAME_LENGTH = "Computer name's length too short";
-	private static final String INTRO_NOT_VALID_DATE = "Invalid \"Introduced\" date";
+	/**
+	 * FIELDS
+	 */
+	private static final String NAME = "name";
+	
 	private static final String DISCO_NOT_VALID_DATE = "Invalid \"Discontinued\" date";
-
-	public static boolean isValide(ComputerDTO computer) {
-
-		// COMPUTER NAME
-		if (computer == null) {
-			logger.error(COMPUTER_NULL);
-			return false;
-		}
-		if (computer.getName() == null) {
-			logger.error(COMPUTER_NAME_NULL);
-			return false;
-		}
-		if (computer.getName().isEmpty()) {
-			logger.error(COMPUTER_NAME_EMPTY);
-			return false;
-		}
-		if (computer.getName().length() < 2) {
-			logger.error(COMPUTER_NAME_LENGTH);
-			return false;
-		}
-
-		// COMPUTER INTRODUCED
-		if (computer.getIntroduced() != null) {
-			String introDate = computer.getIntroduced();
-			if (!introDate.isEmpty()) {
-				if (!Util.isDateValid(introDate + " 00:00:00")) {
-					logger.error(INTRO_NOT_VALID_DATE);
-					return false;
-				}			
-				LocalDate intro = Util.produceLocalDateFromString(introDate);
-				if (!isValideMonth(intro)) {
-					logger.error(INTRO_NOT_VALID_DATE);
-					return false;
-				}
-			}
-		}
-
-		// COMPUTER DISCONINUED
-		if (computer.getDiscontinued() != null) {
-			String discoDate = computer.getIntroduced();
-			if (!discoDate.isEmpty()) {
-				if (!Util.isDateValid(discoDate + " 00:00:00")) {
-					logger.error(DISCO_NOT_VALID_DATE);
-					return false;
-				}
-				LocalDate dico = Util.produceLocalDateFromString(discoDate);
-				if (!isValideMonth(dico)) {
-					logger.error(DISCO_NOT_VALID_DATE);
-					return false;
-				}
-			}
-		}
-
-		return true;
-	}
-
+	
 	private static boolean isValideMonth(LocalDate ld) {
 		List<Integer> months30 = new ArrayList<Integer>(Arrays.asList(4, 6, 9,
 				11));
@@ -100,5 +48,45 @@ public class ComputerValidator {
 			}
 		}
 		return true;
+	}
+	
+	private boolean isValidLocalDate (String localdate) {
+		String tmpLocaldate = localdate.trim();
+		if (!tmpLocaldate.isEmpty()) {
+			if (!Util.isDateValid(tmpLocaldate + " 00:00:00")) {
+				logger.error(DISCO_NOT_VALID_DATE);
+				return false;
+			}
+			LocalDate dico = Util.produceLocalDateFromString(tmpLocaldate);
+			if (!isValideMonth(dico)) {
+				logger.error(DISCO_NOT_VALID_DATE);
+				return false;
+			}
+		}		
+		
+		return true;
+	}
+
+	@Override
+	public boolean supports(Class<?> paramClass) {
+		return ComputerDTO.class.equals(paramClass);
+	}
+
+	@Override
+	public void validate(Object obj, Errors errors) {
+		ValidationUtils.rejectIfEmptyOrWhitespace(errors, NAME, "compuName.required");
+		ComputerDTO compu = (ComputerDTO) obj;
+		if (compu.getIntroduced() != null) {
+			if (!isValidLocalDate(compu.getIntroduced())) {
+				errors.rejectValue("introduced", "badDate", new Object[]{"'introduced'"}, "Bad \"Introduced\" date");
+			}
+		}		
+		
+		if (compu.getDiscontinued() != null) {
+			if (!isValidLocalDate(compu.getDiscontinued())) {
+				errors.rejectValue("discontinued", "badDate", new Object[]{"'discontinued'"}, "Bad \"Discontinued\" date");
+			}
+		}
+		
 	}
 }

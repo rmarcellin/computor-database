@@ -1,7 +1,7 @@
 <%@ page pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
-<%@ taglib tagdir="/WEB-INF/tags/" prefix="p"%>
+<%@ taglib tagdir="/WEB-INF/tags/" prefix="page"%>
 
 <!DOCTYPE html>
 <html>
@@ -168,7 +168,7 @@
 	</section>
 
 	<footer class="navbar-fixed-bottom">
-		<p:page pageNumbers="${ page.pageNumbers }"
+		<page:page pageNumbers="${ page.pageNumbers }"
 			nextPage="${ page.nextPage }" previousPage="${ page.previousPage }"
 			url="/Dashboard" page="${ page.page }"
 			pageStart="${ page.pageStart }" />

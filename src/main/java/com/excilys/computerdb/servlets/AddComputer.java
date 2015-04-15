@@ -9,15 +9,21 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.Validator;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 
 import com.excilys.computerdb.dto.CompanyDTO;
 import com.excilys.computerdb.dto.ComputerDTO;
@@ -26,7 +32,6 @@ import com.excilys.computerdb.model.Computer;
 import com.excilys.computerdb.services.ICompanyService;
 import com.excilys.computerdb.services.IComputerService;
 import com.excilys.computerdb.utils.Util;
-import com.excilys.computerdb.validators.ComputerValidator;
 
 /**
  * Servlet implementation class AddComputer
@@ -39,6 +44,10 @@ public class AddComputer {
 	private ICompanyService companyService;
 	@Autowired
 	private IComputerService computerService;
+	@Autowired
+	private Validator computerValidator;
+	@Autowired
+	private LocaleChangeInterceptor beanLocal;
 
 	/**
 	 * Logger initialisation
@@ -80,21 +89,11 @@ public class AddComputer {
 	 *      response)
 	 */
 	@RequestMapping(method = RequestMethod.GET)
-	protected String doGet(ModelMap model) throws ServletException, IOException {
+	protected String doGet(Model model) throws ServletException, IOException {
 		logger.info("doGet " + DO_GET_POST_STARTED);
 		// In the form, the user will have a dropdown list of all the companies
 		// present in the database
-		List<Company> listCompany = null;
-		try {
-			listCompany = companyService.getCompanies();
-		} catch (SQLException e) {
-			logger.error("doGet " + DO_GET_POST_CONTEXT_FAILURE);
-			return "404";
-		}
-		List<CompanyDTO> companiesDTO = new ArrayList<>();
-		for (Company comp : listCompany) {
-			companiesDTO.add(Util.fromCompanyToDTO(comp));
-		}
+		List<CompanyDTO> companiesDTO = allCompanies();
 		model.addAttribute("companies", companiesDTO);
 		logger.info("doGet " + DO_GET_POST_SUCCEDED);
 		return "addComputer";
@@ -105,29 +104,51 @@ public class AddComputer {
 	 *      response)
 	 */
 	@RequestMapping(method = RequestMethod.POST)
-	protected String doPost(ModelMap model,
-			@ModelAttribute("computerForm") final ComputerDTO computerDTO)
-			throws ServletException, IOException {
+	protected String doPost(Model model,
+			@ModelAttribute("computerForm") 
+			@Valid final ComputerDTO computerDTO,
+			BindingResult bindingResult) {
 		logger.info("AddComputer.doPost " + DO_GET_POST_STARTED);
-
+		
+		if (bindingResult.hasErrors()) {
+			logger.error("AddComputer.doPost : errors in form");
+			List<CompanyDTO> companiesDTO = allCompanies();
+			model.addAttribute("companies", companiesDTO);
+			return "addComputer";
+		}
 		// Fabricating a computer service which is going to add the computer
 		// to the database using a computerDAO
-		if (ComputerValidator.isValide(computerDTO)) {
-			Computer computer = Util.fromDTOToComputer(computerDTO);
-			try {
-				computerService.setComputer(computer);
-			} catch (SQLException e) {
-				logger.error("AddComputer.doPost "
-						+ DO_GET_POST_CONTEXT_FAILURE);
-				return "redirect:404";
-			}
-			logger.info("AddComputer.doPost " + DO_GET_POST_SUCCEDED);
-			return "redirect:Dashboard";
-		} else {
-			logger.error("AddComputer.doGPost " + DO_GET_POST_CONTEXT_FAILURE);
+		Computer computer = Util.fromDTOToComputer(computerDTO);
+		try {
+			computerService.setComputer(computer);
+		} catch (SQLException e) {
+			logger.error("AddComputer.doPost "
+					+ DO_GET_POST_CONTEXT_FAILURE);
 			return "redirect:404";
 		}
+		logger.info("AddComputer.doPost " + DO_GET_POST_SUCCEDED);
+		return "redirect:Dashboard";
 
+	}
+	
+	///////////////////// UTILS /////////////////////////
+	private List<CompanyDTO> allCompanies () {
+		List<Company> listCompany = null;
+		try {
+			listCompany = companyService.getCompanies();
+		} catch (SQLException e) {
+			logger.error("doGet " + DO_GET_POST_CONTEXT_FAILURE);
+		}
+		List<CompanyDTO> companiesDTO = new ArrayList<>();
+		for (Company comp : listCompany) {
+			companiesDTO.add(Util.fromCompanyToDTO(comp));
+		}
+		return companiesDTO;
+	}
+	
+	@InitBinder
+	private void initBinder (WebDataBinder binder) {
+		binder.setValidator(computerValidator);
 	}
 
 }
