@@ -1,71 +1,26 @@
 package com.excilys.computerdb.validators;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import org.joda.time.LocalDate;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
 import com.excilys.computerdb.dto.ComputerDTO;
-import com.excilys.computerdb.utils.Util;
 
 public class ComputerValidator implements Validator {
-	private static Logger logger = LoggerFactory.getLogger(ComputerValidator.class);
+	
+	@Autowired
+	private MessageSource messageSource;
 	
 	/**
 	 * FIELDS
 	 */
 	private static final String NAME = "name";
-	
-	private static final String DISCO_NOT_VALID_DATE = "Invalid \"Discontinued\" date";
-	
-	private static boolean isValideMonth(LocalDate ld) {
-		List<Integer> months30 = new ArrayList<Integer>(Arrays.asList(4, 6, 9,
-				11));
-		if (months30.contains(ld.getMonthOfYear()) && ld.getDayOfMonth() > 30) {
-			return false;
-		}
-		List<Integer> months31 = new ArrayList<Integer>(Arrays.asList(1, 3, 5,
-				7, 8, 10, 12));
-		if (months31.contains(ld.getMonthOfYear()) && ld.getDayOfMonth() > 31) {
-			return false;
-		}
-		if (ld.getDayOfMonth() == 2) {
-			int year = ld.getYear();
-			if (year % 4 != 0) {
-				if (year % 100 != 0) {
-					return false;
-				} else {
-					if (year % 400 != 0) {
-						return false;
-					}
-				}
-			}
-		}
-		return true;
-	}
-	
-	private boolean isValidLocalDate (String localdate) {
-		String tmpLocaldate = localdate.trim();
-		if (!tmpLocaldate.isEmpty()) {
-			if (!Util.isDateValid(tmpLocaldate + " 00:00:00")) {
-				logger.error(DISCO_NOT_VALID_DATE);
-				return false;
-			}
-			LocalDate dico = Util.produceLocalDateFromString(tmpLocaldate);
-			if (!isValideMonth(dico)) {
-				logger.error(DISCO_NOT_VALID_DATE);
-				return false;
-			}
-		}		
-		
-		return true;
-	}
 
 	@Override
 	public boolean supports(Class<?> paramClass) {
@@ -75,18 +30,66 @@ public class ComputerValidator implements Validator {
 	@Override
 	public void validate(Object obj, Errors errors) {
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, NAME, "compuName.required");
+				
 		ComputerDTO compu = (ComputerDTO) obj;
-		if (compu.getIntroduced() != null) {
-			if (!isValidLocalDate(compu.getIntroduced())) {
-				errors.rejectValue("introduced", "badDate", new Object[]{"'introduced'"}, "Bad \"Introduced\" date");
-			}
-		}		
+		Pattern pattern = Pattern.compile(messageSource.getMessage("date.pattern", null, LocaleContextHolder.getLocale()));
+		Matcher introMarcher = pattern.matcher(compu.getIntroduced());
+		Matcher discoMatcher = pattern.matcher(compu.getDiscontinued());
 		
-		if (compu.getDiscontinued() != null) {
-			if (!isValidLocalDate(compu.getDiscontinued())) {
-				errors.rejectValue("discontinued", "badDate", new Object[]{"'discontinued'"}, "Bad \"Discontinued\" date");
+		
+		if (compu.getIntroduced() != null) {
+			if (!compu.getIntroduced().isEmpty()) {
+				if (!introMarcher.matches()) {
+					errors.rejectValue("introduced", "invalid.date", new Object[]{"'introduced'"}, "Bad \"Introduced\" date");
+				} else {
+					validateYearLogic(introMarcher, errors, "introduced");
+				}
 			}
 		}
 		
+		if (compu.getDiscontinued() != null) {
+			if (!compu.getDiscontinued().isEmpty()) {
+				if (!discoMatcher.matches()) {
+					errors.rejectValue("discontinued", "invalid.date", new Object[]{"'discontinued'"}, "Bad \"Discontinued\" date");
+				} else {
+					validateYearLogic(discoMatcher, errors, "discontinued");
+				}
+			}
+		}
 	}
+	
+	
+	////////////////////////////////////////////////////////////////////	
+	private void validateYearLogic(final Matcher matcher, Errors errors, String field) {
+		matcher.reset();
+		if (matcher.find()) {
+			String day = matcher.group(1);
+			String month = matcher.group(2);
+			int year = Integer.parseInt(matcher.group(3));
+
+			if (day.equals("31")
+					&& (month.equals("4") || month.equals("6")
+							|| month.equals("9") || month.equals("11")
+							|| month.equals("04") || month.equals("06") || month
+								.equals("09"))) { // only 1,3,5,7,8,10,12 has 31 days
+				errors.rejectValue(field, "invalid.date.days", new Object[]{"'" + month  + "'", "30"}, "");
+			} else if (month.equals("2") || month.equals("02")) {
+				// leap year
+				if (year % 4 == 0) {
+					if (day.equals("30") || day.equals("31")) {
+						errors.rejectValue(field, "invalid.date.days", new Object[]{"'" + month  + "'", "29"}, "");
+					}
+				} else {
+					if (day.equals("29") || day.equals("30")
+							|| day.equals("31")) {
+						errors.rejectValue(field, "invalid.date.days", new Object[]{"'" + month  + "'", "28"}, "");
+					}
+				}
+			}
+		}
+	}
+	
+	
+	
+	
 }

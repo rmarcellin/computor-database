@@ -1,7 +1,7 @@
 <%@ page pageEncoding="UTF-8" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 <!DOCTYPE html>
 <html>
@@ -36,13 +36,23 @@
                     <form:form modelAttribute="computerForm" action="AddComputer" method="POST">
                         <fieldset>
                             <div class="form-group">
-                                <label for="computerName">Computer name</label>
-                                <input type="text" class="form-control" id="computerName" name="name" placeholder="Computer name">
+                                <label for="computerName">
+                                	<spring:message code="computer.name" />
+                                	<c:set var="namePlaceholder">
+                                		<spring:message code="computer.name" />
+                                	</c:set>
+                                </label>
+                                <input type="text" class="form-control" id="computerName" name="name" placeholder="${ namePlaceholder }">
                                 <form:errors path="name" cssClass="error"/>
                             </div>
                             <div class="form-group">
-                                <label for="introduced">Introduced date</label>
-                                <input type="date" class="form-control" id="introduced" name="introduced" placeholder="Introduced date">
+                                <label for="introduced">
+                                	<spring:message code="intro.date"/>
+                                	<c:set var="introPlaceholder">
+                                		<spring:message code="intro.date" />
+                                	</c:set>
+                                </label>
+                                <input type="date" class="form-control" id="introduced" name="introduced" placeholder="${ introPlaceholder }">
                                 <form:errors path="introduced" cssClass="error"/>
                             </div>
                             <div class="form-group">

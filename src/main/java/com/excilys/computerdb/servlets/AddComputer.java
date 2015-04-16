@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 
 import com.excilys.computerdb.dto.CompanyDTO;
 import com.excilys.computerdb.dto.ComputerDTO;
@@ -46,8 +45,6 @@ public class AddComputer {
 	private IComputerService computerService;
 	@Autowired
 	private Validator computerValidator;
-	@Autowired
-	private LocaleChangeInterceptor beanLocal;
 
 	/**
 	 * Logger initialisation
@@ -66,15 +63,6 @@ public class AddComputer {
 	private static final String DO_GET_POST_STARTED = "method called";
 	private static final String DO_GET_POST_CONTEXT_FAILURE = "Context ~ Request dispatcher failure";
 	private static final String DO_GET_POST_SUCCEDED = "method succeded";
-
-	/**
-	 * doGet
-	 */
-
-	/**
-	 * doPost
-	 */
-	// private static final String DO_POST_
 
 	/**
 	 * @see HttpServlet#HttpServlet()

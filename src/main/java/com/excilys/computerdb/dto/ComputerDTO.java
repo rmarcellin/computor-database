@@ -14,6 +14,7 @@ public class ComputerDTO {
 	private String name;
 	private String introduced;
 	private String discontinued;
+	@Size(min = 2, max = 50)
 	private String companyName;
 	private long companyId;
 	

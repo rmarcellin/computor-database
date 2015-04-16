@@ -1,7 +1,6 @@
 package com.excilys.computerdb.utils;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -11,6 +10,7 @@ import java.util.Scanner;
 import java.util.regex.Pattern;
 
 import org.joda.time.LocalDate;
+import org.slf4j.LoggerFactory;
 
 import com.excilys.computerdb.dto.CompanyDTO;
 import com.excilys.computerdb.dto.ComputerDTO;
@@ -37,32 +37,11 @@ public class Util {
 		if (ld == null) {
 			return null;
 		}
-		return Timestamp.valueOf(ld.getYear() + "-" + ld.getMonthOfYear() + "-"
-				+ ld.getDayOfMonth() + " 00:00:00.0");
-	}
-
-	/**
-	 * Close ressources.
-	 *
-	 * @param conn
-	 *            the conn
-	 * @param p
-	 *            the p
-	 * @throws SQLException
-	 *             the SQL exception
-	 * @pre conn != null p != null
-	 */
-	public static void closeRessources(Connection connection, PreparedStatement p,
-			ResultSet resultSet) throws SQLException {
-		if (connection != null) {
-			connection.close();
-		}
-		if (p != null) {
-			p.close();
-		}
-		if (resultSet != null) {
-			resultSet.close();
-		}
+		int year = ld.getYear();
+		int day = ld.getDayOfMonth();
+		int month = ld.getMonthOfYear();
+		LoggerFactory.getLogger(Util.class).debug("YEAR : {} -> MONTH : {} -> DAY : {}", year, month, day);
+		return Timestamp.valueOf(year + "-" + month + "-" + day + " 00:00:00.0");
 	}
 
 	/**
@@ -92,15 +71,15 @@ public class Util {
 			return null;
 		}
 				
-		String[] str = localDate.split("-");
-		int year = Integer.parseInt(str[0]);
+		String[] str = localDate.split("/");
+		int day = Integer.parseInt(str[0]);
 		int month = Integer.parseInt(str[1]);
-		int day;
+		int year;
 		if (!str[2].contains(":")) {
-			day = Integer.parseInt(str[2]);
+			year = Integer.parseInt(str[2]);
 		} else {
 			String[] tmpDay = str[2].split(" ");
-			day = Integer.parseInt(tmpDay[0]);
+			year = Integer.parseInt(tmpDay[0]);
 		}
 		
 		return new LocalDate(year, month, day);
@@ -208,21 +187,6 @@ public class Util {
 	public static CompanyDTO fromCompanyToDTO(Company company) {
 		return new CompanyDTO(company.getId(), company.getName());
 	}
-
-	/*public static ComputerDTO getComputerDTOFromModelMap(
-			ModelMap request) {
-		ComputerDTO computerDTO = new ComputerDTO();
-		String compId = request.getParameter("id");
-		if (compId != null) {
-			computerDTO.setId(Long.parseLong(compId));
-		}
-		computerDTO.setName(request.getParameter("computerName"));
-		computerDTO.setIntroduced(request.getParameter("introduced"));
-		computerDTO.setDiscontinued(request.getParameter("discontinued"));
-		computerDTO.setCompanyId(Long.parseLong(request.getParameter("companyId")));
-
-		return computerDTO;
-	}*/
 	
 	public static String getNextSortOrder (String currentOrder) {
 		if (currentOrder == null) {
