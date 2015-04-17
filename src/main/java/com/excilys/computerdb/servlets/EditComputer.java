@@ -101,9 +101,6 @@ public class EditComputer {
 			List<CompanyDTO> companiesDTO = allCompanies();
 			model.addAttribute("companies", companiesDTO);
 			model.addAttribute("computerDTO", computerDTO);
-			
-			System.out.println(computerDTO.getIntroduced() + " --- " + computerDTO.getDiscontinued());
-			
 			return "editComputer";
 		}
 		

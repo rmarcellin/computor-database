@@ -1,10 +1,13 @@
 package com.excilys.computerdb.model;
 
+import javax.persistence.Entity;
+
 import org.joda.time.LocalDate;
 
 /**
  * The Class Computer.
  */
+@Entity
 public class Computer {
 	
 	/** The id. */
