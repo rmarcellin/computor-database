@@ -2,6 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ taglib tagdir="/WEB-INF/tags/" prefix="page"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 <!DOCTYPE html>
 <html>
@@ -23,7 +24,7 @@
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
 			<a class="navbar-brand" href="${ thisPage }"> Application -
-				Computer Database </a>
+				<spring:message code="computer.db"/> </a>
 		</div>
 	</header>
 
@@ -31,23 +32,27 @@
 		<div class="container">
 			<h1 id="homeTitle">
 				<c:out value="${ page.size }" />
-				Computers found
+				<spring:message code="computers.found"/>
 			</h1>
 			<div id="actions" class="form-horizontal">
 				<!-- /!\ SEARCH /!\  -->
 				<div class="pull-left">
 					<form id="searchForm" action="SearchServlet" method="GET" class="form-inline">
 						<input type="search" id="searchbox" name="search"
-							class="form-control" placeholder="Search name" /> <input
-							type="submit" id="searchsubmit" value="Filter by name"
+							class="form-control" placeholder="<spring:message code="search.name"/>" /> <input
+							type="submit" id="searchsubmit" value="<spring:message code="firlter.name"/>"
 							class="btn btn-primary" />
 					</form>					
 				</div>
 				<div class="pull-right">
 					<c:url var="addComputer" value="/AddComputer" />
-					<a class="btn btn-success" id="addComputer" href="${ addComputer }">Add
-						Computer</a> <a class="btn btn-default" id="editComputer" href="#"
-						onclick="$.fn.toggleEditMode();">Edit</a>
+					<a class="btn btn-success" id="addComputer" href="${ addComputer }">
+						<spring:message code="add.computer" />
+					</a> 
+					<a class="btn btn-default" id="editComputer" href="#"
+						onclick="$.fn.toggleEditMode();">
+						<spring:message code="edit" />
+					</a>
 				</div>
 			</div>
 		</div>
@@ -72,7 +77,7 @@
 							</a>
 						</span></th>
 						<th>	
-							Computer name &nbsp;
+							<spring:message code="computer.name" /> &nbsp;
 							<!-- /!\ ORDER-BY /!\  -->
 							<c:url var="orderByName" value="/Dashboard">
 								<c:param name="pageNum" value="${ page.page }" />
@@ -84,7 +89,7 @@
 							</a> 						
 						</th>
 						<th>
-							Introduced date &nbsp;
+							<spring:message code="intro.date"/> &nbsp;
 							<!-- /!\ ORDER-BY /!\  -->
 							<c:url var="orderByIntroduced" value="/Dashboard">
 								<c:param name="pageNum" value="${ page.page }" />
@@ -98,7 +103,7 @@
 						</th>
 						<!-- Table header for Discontinued Date -->
 						<th>
-							Discontinued date &nbsp;
+							<spring:message code="disco.date"/> &nbsp;
 							<!-- /!\ ORDER-BY /!\  -->
 							<c:url var="orderByDiscontinued" value="/Dashboard">
 								<c:param name="pageNum" value="${ page.page }" />
@@ -111,7 +116,7 @@
 						</th>
 						<!-- Table header for Company -->
 						<th>
-							Company &nbsp;
+							<spring:message code="company"/> &nbsp;
 							<!-- /!\ ORDER-BY /!\  -->	
 							<c:url var="orderByCompanyId" value="/Dashboard">
 								<c:param name="pageNum" value="${ page.page }" />

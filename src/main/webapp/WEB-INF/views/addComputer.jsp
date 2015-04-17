@@ -24,7 +24,7 @@
     <header class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
         	<c:url var="allComputer" value="/Dashboard" />
-            <a class="navbar-brand" href="${ allComputer }"> Application - Computer Database </a>
+            <a class="navbar-brand" href="${ allComputer }"> Application - <spring:message code="computer.db"/> </a>
         </div>
     </header>
 
@@ -32,7 +32,8 @@
         <div class="container">
             <div class="row">
                 <div class="col-xs-8 col-xs-offset-2 box">
-                    <h1>Add Computer</h1>
+                    <h1><spring:message code="add.computer"/></h1>
+                    
                     <form:form modelAttribute="computerForm" action="AddComputer" method="POST">
                         <fieldset>
                             <div class="form-group">
@@ -56,12 +57,22 @@
                                 <form:errors path="introduced" cssClass="error"/>
                             </div>
                             <div class="form-group">
-                                <label for="discontinued">Discontinued date</label>
-                                <input type="date" class="form-control" id="discontinued" name="discontinued" placeholder="Discontinued date">
+                                <label for="discontinued">
+                                	<spring:message code="disco.date"/>
+                                	<c:set var="discoPlaceholder">
+                                		<spring:message code="disco.date" />
+                                	</c:set>                                
+                                </label>
+                                <input type="date" class="form-control" id="discontinued" name="discontinued" placeholder="${ discoPlaceholder }">
                                 <form:errors path="discontinued" cssClass="error"/>
                             </div>
                             <div class="form-group">
-                                <label for="companyId">Company</label>
+                                <label for="companyId">
+                                	<spring:message code="company"/>
+                                	<c:set var="companyPlaceholder">
+                                		<spring:message code="company" />
+                                	</c:set>
+                                </label>
                                 <select class="form-control" id="companyId" name="companyId" >
                                 	<c:forEach var="company" items="${ companies }">
                                     	<option value="${ company.id }">
@@ -72,9 +83,9 @@
                             </div>                  
                         </fieldset>
                         <div class="actions pull-right">
-                            <input type="submit" value="Add" class="btn btn-primary">
-                            or
-                            <a href="${ allComputer }" class="btn btn-default">Cancel</a>
+                            <input type="submit" value="<spring:message code="add"/>" class="btn btn-primary">
+                            <spring:message code="or"/>
+                            <a href="${ allComputer }" class="btn btn-default"><spring:message code="cancel"/></a>
                         </div>
                     </form:form>
                 </div>

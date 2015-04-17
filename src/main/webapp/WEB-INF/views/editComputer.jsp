@@ -1,6 +1,7 @@
 <%@ page pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 <!DOCTYPE html>
 <html>
@@ -24,7 +25,7 @@
 		<div class="container">
 			<c:url var="thisPage" value="/Dashboard" />
 			<a class="navbar-brand" href="${ thisPage }"> Application -
-				Computer Database </a>
+				<spring:message code="computer.db"/> </a>
 		</div>
 	</header>
 	<section id="main">
@@ -32,36 +33,57 @@
 			<div class="row">
 				<div class="col-xs-8 col-xs-offset-2 box">
 					<div class="label label-default pull-right">id: 
-						<c:out value="${ id }" />
+						<c:out value="${ computerDTO.id }" />
 					</div>
-					<h1>Edit Computer</h1>
+					<h1><spring:message code="add.computer"/></h1>
 
 					<form:form modelAttribute="computerForm" action="EditComputer" method="POST">
 						<input type="hidden" id="id" name="id" value="${ computerDTO.id }" />
 						<fieldset>
 							<div class="form-group">
-								<label for="computerName">Computer name</label> 
+								<label for="computerName">
+									<spring:message code="computer.name" />
+                                	<c:set var="namePlaceholder">
+                                		<spring:message code="computer.name" />
+                                	</c:set>								
+								</label> 
 								<input type="text" class="form-control" id="computerName" name="name"
-									placeholder="Computer name" value="${ computerDTO.name }">
+									placeholder="${ namePlaceholder }" value="${ computerDTO.name }">
 								<form:errors path="name" cssClass="error"/>
 							</div>
 							<div class="form-group">
-								<label for="introduced">Introduced date</label> 
+								<label for="introduced">
+									<spring:message code="intro.date"/>
+                                	<c:set var="introPlaceholder">
+                                		<spring:message code="intro.date" />
+                                	</c:set>
+								</label> 
 								<input
 									type="date" class="form-control" id="introduced" name="introduced"
-									placeholder="Introduced date"
+									placeholder="${ introPlaceholder }"
 									value="${ computerDTO.introduced }">
 								<form:errors path="introduced" cssClass="error"/>
 							</div>
 							<div class="form-group">
-								<label for="discontinued">Discontinued date</label> <input
+								<label for="discontinued">
+									<spring:message code="disco.date"/>
+                                	<c:set var="discoPlaceholder">
+                                		<spring:message code="disco.date" />
+                                	</c:set>
+								</label> 
+								<input
 									type="date" class="form-control" id="discontinued" name="discontinued"
-									placeholder="Discontinued date"
+									placeholder="${ discoPlaceholder }"
 									value="${ computerDTO.discontinued }">
 								<form:errors path="discontinued" cssClass="error"/>
 							</div>
 							<div class="form-group">
-								<label for="companyId">Company</label> 
+								<label for="companyId">
+									<spring:message code="company"/>
+                                	<c:set var="companyPlaceholder">
+                                		<spring:message code="company" />
+                                	</c:set>
+								</label> 
 								<select class="form-control" id="companyId" name="companyId">
 									<option value="0"><c:out value="${ computerDTO.companyName }" /></option>
 									<c:forEach var="company" items="${ companies }">
@@ -73,8 +95,8 @@
 							</div>
 						</fieldset>
 						<div class="actions pull-right">
-							<input type="submit" value="Edit" class="btn btn-primary">
-							or <a href="${ thisPage }" class="btn btn-default">Cancel</a>
+							<input type="submit" value="<spring:message code="edit"/>" class="btn btn-primary">
+							<spring:message code="or"/> <a href="${ thisPage }" class="btn btn-default"><spring:message code="cancel"/></a>
 						</div>
 					</form:form>
 				</div>
