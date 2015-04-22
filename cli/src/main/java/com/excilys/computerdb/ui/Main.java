@@ -1,7 +1,6 @@
 package com.excilys.computerdb.ui;
 
 import java.sql.SQLException;
-import com.excilys.computerdb.services.ComputerService;
 
 
 
