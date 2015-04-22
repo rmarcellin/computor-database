@@ -8,12 +8,6 @@ import java.util.List;
  */
 public class Page<Type> {
 	
-	/*private enum OrderCriteria {
-		NAME_DEFAULT, NAME_ASC, NAME_DESC,
-		INTRO_DEFAULT, INTRO_ASC, INTRO_DESC,
-		DISCO_DEFAULT, DISCO_ASC, DISCO_DESC,
-		COMP_ID_DEFAULT, COMP_ID_ASC, COMP_ID_DESC}*/
-	
 	private static int FOOTER_PAGE_SIZE = 5;
 
 	List<Type> listT;
@@ -94,13 +88,5 @@ public class Page<Type> {
 		}
 		return tmp;
 	}
-	
-	/*public void nextCriteria() {
-		if (orderCriteria == OrderCriteria.ASC) {
-			orderCriteria = OrderCriteria.DESC;
-		} else {
-			orderCriteria = OrderCriteria.ASC;
-		}
-	}*/
 	
 }

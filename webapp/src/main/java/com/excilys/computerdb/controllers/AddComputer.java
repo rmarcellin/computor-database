@@ -1,14 +1,9 @@
 package com.excilys.computerdb.controllers;
 
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
@@ -77,7 +72,7 @@ public class AddComputer {
 	 *      response)
 	 */
 	@RequestMapping(method = RequestMethod.GET)
-	protected String doGet(Model model) throws ServletException, IOException {
+	protected String doGet(Model model) {
 		logger.info("doGet " + DO_GET_POST_STARTED);
 		// In the form, the user will have a dropdown list of all the companies
 		// present in the database

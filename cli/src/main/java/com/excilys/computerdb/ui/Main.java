@@ -2,9 +2,16 @@ package com.excilys.computerdb.ui;
 
 import java.sql.SQLException;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.excilys.computerdb.services.IComputerService;
+
 
 
 public class Main {
+	
+	@Autowired
+	private IComputerService cs;
 	
 
 	public static void main(String[] args) throws SQLException {
@@ -25,8 +32,7 @@ public class Main {
 		System.out.println("|    /!\\ Pour les étapes 4, 5, et 6, suivez les instructions    |");
 		System.out.println("+---------------------------------------------------------------+");
 		
-		ComputerService cs = new ComputerService();
-		System.out.println(cs.getComputers(null, null));
+		//System.out.println(cs.getComputers(null, null));
 		
 	}
 

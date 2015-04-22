@@ -1,14 +1,8 @@
 package com.excilys.computerdb.controllers;
 
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,8 +62,7 @@ public class SearchServlet {
 	@RequestMapping(method = RequestMethod.GET)
 	protected String doGet(
 			ModelMap model,
-			@RequestParam(value = "search", required = true) final String criteria)
-			throws ServletException, IOException {
+			@RequestParam(value = "search", required = true) final String criteria) {
 		logger.info("doGet " + DO_GET_POST_STARTED);
 		List<String> errors = new ArrayList<String>();
 		if (criteria != null) {

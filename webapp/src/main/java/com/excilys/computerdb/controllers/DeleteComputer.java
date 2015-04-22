@@ -1,12 +1,6 @@
 package com.excilys.computerdb.controllers;
 
-import java.io.IOException;
 import java.sql.SQLException;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,8 +52,7 @@ public class DeleteComputer {
 	 */
 	@RequestMapping(method = RequestMethod.POST)
 	protected String doPost(
-			@RequestParam(value = "selection") final String selection)
-			throws ServletException, IOException {
+			@RequestParam(value = "selection") final String selection) {
 		logger.info("doPost " + DO_GET_POST_STARTED);
 		try {
 			String[] ids = selection.split(",");

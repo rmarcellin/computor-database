@@ -1,16 +1,10 @@
 package com.excilys.computerdb.controllers;
 
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -80,8 +74,7 @@ public class Dashboard {
 	protected String doGet(ModelMap model,
 			@RequestParam(value = "sortKey", required = false) String sortKey,
 			@RequestParam(value = "pageNum", required = false) String pageNum,
-			@RequestParam(value = "startP", required = false) String startP)
-			throws ServletException, IOException {
+			@RequestParam(value = "startP", required = false) String startP) {
 		logger.info("doGet " + DO_GET_POST_STARTED);
 		List<Computer> computers = null;
 		try {
