@@ -36,7 +36,6 @@ public class ComputerValidator implements Validator {
 		Matcher introMarcher = pattern.matcher(compu.getIntroduced());
 		Matcher discoMatcher = pattern.matcher(compu.getDiscontinued());
 		
-		
 		if (compu.getIntroduced() != null) {
 			if (!compu.getIntroduced().isEmpty()) {
 				if (!introMarcher.matches()) {

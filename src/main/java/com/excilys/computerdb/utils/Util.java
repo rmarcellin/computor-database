@@ -71,7 +71,7 @@ public class Util {
 			return null;
 		}
 				
-		String[] str = localDate.split("/");
+		/*String[] str = localDate.split("/");
 		int day = Integer.parseInt(str[0]);
 		int month = Integer.parseInt(str[1]);
 		int year;
@@ -80,9 +80,11 @@ public class Util {
 		} else {
 			String[] tmpDay = str[2].split(" ");
 			year = Integer.parseInt(tmpDay[0]);
-		}
+		}*/
 		
-		return new LocalDate(year, month, day);
+		
+		
+		return LocalDate.parse(localDate);
 	}
 
 	public static boolean isDateValid(String dateStr) {
@@ -155,10 +157,22 @@ public class Util {
 			comp.setId(computer.getId());
 		}
 		comp.setName(computer.getName());
-		comp.setIntroduced(Util.produceLocalDateFromString(computer
-				.getIntroduced()));
-		comp.setDiscontinued(Util.produceLocalDateFromString(computer
-				.getDiscontinued()));
+		if (computer.getIntroduced() != null) {
+			String defIntro = computer.getIntroduced().trim();
+			if (!defIntro.isEmpty()) {
+				comp.setIntroduced(LocalDate.parse(computer
+						.getIntroduced()));
+			}
+		}
+		
+		if (computer.getDiscontinued() != null) {
+			String defDisco = computer.getDiscontinued().trim();
+			if (!defDisco.isEmpty()) {
+				comp.setDiscontinued(LocalDate.parse(computer
+						.getDiscontinued()));
+			}
+		}
+		
 		comp.setCompany(new Company(computer.getCompanyId(), computer.getCompanyName()));
 		return comp;
 	}

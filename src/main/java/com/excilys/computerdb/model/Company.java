@@ -1,26 +1,34 @@
 package com.excilys.computerdb.model;
 
-import javax.persistence.Entity;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import java.io.Serializable;
 
-import org.hibernate.validator.constraints.NotEmpty;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
  * The Class Company.
  */
 @Entity
-public class Company {
+@Table(name = "company")
+public class Company implements Serializable  {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6142732520823226097L;
 
 	/** The id. */
-	@Min(1)
+	@Id
+	@Column(name = "id")
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 
 	/** The name. */
-	@NotNull
-	@NotEmpty
-	@Size(min = 2)
+	@Column(name = "name")
 	private String name;
 
 	/**

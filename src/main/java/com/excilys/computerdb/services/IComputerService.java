@@ -21,6 +21,4 @@ public interface IComputerService {
 
 	void deleteComputer(long computerId) throws SQLException;
 
-	void updateComputer(Computer computer) throws SQLException;
-
 }

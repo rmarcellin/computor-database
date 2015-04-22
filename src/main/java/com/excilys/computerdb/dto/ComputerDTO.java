@@ -1,15 +1,10 @@
 package com.excilys.computerdb.dto;
 
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
-import org.hibernate.validator.constraints.NotEmpty;
 
 public class ComputerDTO {
 
 	private long id;
-	@NotNull
-	@NotEmpty
 	@Size(min = 2, max = 50)
 	private String name;
 	private String introduced;

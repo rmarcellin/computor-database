@@ -1,28 +1,54 @@
 package com.excilys.computerdb.model;
 
-import javax.persistence.Entity;
+import java.io.Serializable;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.Type;
 import org.joda.time.LocalDate;
 
 /**
  * The Class Computer.
  */
 @Entity
-public class Computer {
+@Table(name = "computer")
+public class Computer implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1228204836119941849L;
+
 	/** The id. */
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "id")
 	private long id;
 	
 	/** The name. */
+	@Column(name = "name")
 	private String name;
 	
 	/** The introduced. */
+	@Column(name = "introduced")
+	@Type(type = "com.excilys.computerdb.model.LocalDateSerializer")
 	private LocalDate introduced;
 	
 	/** The discontinued. */
+	@Column(name= "discontinued")
+	@Type(type = "com.excilys.computerdb.model.LocalDateSerializer")
 	private LocalDate discontinued;
 	
 	/** The company id. */
+	@OneToOne
+	@JoinColumn(name = "company_id")
 	private Company company;
 	
 	/**

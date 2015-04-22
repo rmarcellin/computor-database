@@ -3,30 +3,28 @@ package com.excilys.computerdb.dao;
 import java.sql.SQLException;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import com.excilys.computerdb.mapper.CompanyMapper;
 import com.excilys.computerdb.model.Company;
+import com.excilys.computerdb.model.QCompany;
+import com.mysema.query.jpa.hibernate.HibernateQuery;
 
 /**
  * The Class CompanyDAO.
  */
-@Repository("companyDAO")
+@Repository
+@Transactional
 public class CompanyDAO implements ICompanyDAO {
 
 	@Autowired
-	private JdbcTemplate jdbcTemplate;
-	/** The repository. */
-	@Autowired
-	private IDAOFactory daoFactory;
-
-	public CompanyDAO() {
-		super();
-	}
+	private SessionFactory sessionFactory;
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(CompanyDAO.class);
@@ -42,9 +40,9 @@ public class CompanyDAO implements ICompanyDAO {
 	 * @param daoFactory
 	 *            the repository dao
 	 */
-	public CompanyDAO(IDAOFactory daoFactory) {
+	public CompanyDAO() {
+		super();
 		logger.info(CMPYDAO_STARTED);
-		this.daoFactory = daoFactory;
 	}
 
 	/*
@@ -69,19 +67,11 @@ public class CompanyDAO implements ICompanyDAO {
 			throw new IllegalArgumentException();
 		}
 
-		final String SQL_SELECT_BY_NAME = "SELECT * FROM company WHERE name = "
-				+ tmpName;
-		Company company = jdbcTemplate.query(SQL_SELECT_BY_NAME,
-				new CompanyMapper()).get(0);
+		QCompany compa = QCompany.company;
+		Session session = sessionFactory.getCurrentSession();
 
-		// Removing the current connection from the ThreadLocal
-		daoFactory.removeConnection();
-
-		logger.info(
-				"CompanyDAO.getCompanyIdByName \"{}\"retrieved successifuly",
-				company.getName());
-
-		return company;
+		return new HibernateQuery(session).from(compa)
+				.where(compa.name.eq(tmpName)).singleResult(compa);
 	}
 
 	/*
@@ -92,16 +82,11 @@ public class CompanyDAO implements ICompanyDAO {
 	@Override
 	public List<Company> getCompanies() throws SQLException {
 		logger.info("CompanyDAO.getCompanies called");
-		List<Company> companies = null;
-		final String SQL_SELECT_ALL_COMPANIES = "SELECT * FROM company";
-		companies = jdbcTemplate.query(SQL_SELECT_ALL_COMPANIES,
-				new CompanyMapper());
 
-		// Removing the current connection from the ThreadLocal
-		daoFactory.removeConnection();
+		QCompany compa = QCompany.company;
+		Session session = sessionFactory.getCurrentSession();
 
-		logger.info("CompanyDAO.getCompanies : All companies retrieved successifuly");
-		return companies;
+		return new HibernateQuery(session).from(compa).list(compa);
 	}
 
 	/*
@@ -126,15 +111,10 @@ public class CompanyDAO implements ICompanyDAO {
 			return null;
 		}
 
-		final String SQL_SEARCH_COMPANIES = "SELECT * FROM company WHERE UCASE(name) LIKE ?";
-		List<Company> companies = jdbcTemplate.query(SQL_SEARCH_COMPANIES,
-				new Object[] {"%" + tmpCriteria + "%"}, new CompanyMapper());
-		
-		// Removing the current connection from the ThreadLocal
-		daoFactory.removeConnection();
-		
-		logger.info("CompanyDAO.getCompaniesSearched : All companies retrieved successifuly");
+		QCompany compa = QCompany.company;
+		Session session = sessionFactory.getCurrentSession();
 
-		return companies;
+		return new HibernateQuery(session).from(compa)
+				.where(compa.name.contains(tmpCriteria)).list(compa);
 	}
 }

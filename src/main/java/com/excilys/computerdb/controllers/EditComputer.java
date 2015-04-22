@@ -1,4 +1,4 @@
-package com.excilys.computerdb.servlets;
+package com.excilys.computerdb.controllers;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -96,6 +96,8 @@ public class EditComputer {
 			BindingResult bindingResult) {
 		logger.info("doPost " + DO_GET_POST_STARTED);
 		
+		logger.info(computerDTO.getIntroduced());
+		
 		if (bindingResult.hasErrors()) {
 			logger.error("EditComputer.doPost " + DO_GET_POST_FORM_VALIDATION_PROBLEM);
 			List<CompanyDTO> companiesDTO = allCompanies();
@@ -106,7 +108,7 @@ public class EditComputer {
 		
 		Computer computer = Util.fromDTOToComputer(computerDTO);
 		try {
-			computerService.updateComputer(computer);
+			computerService.setComputer(computer);
 		} catch (SQLException e) {
 			logger.error("doPost " + DO_POST_EDIT_FAILURE);
 			return "redirect:404";

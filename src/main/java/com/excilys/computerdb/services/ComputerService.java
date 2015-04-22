@@ -61,7 +61,7 @@ public class ComputerService implements IComputerService {
 	@Override
 	public void setComputer(Computer computer) throws SQLException {
 		logger.info("ComputerService.setComputer called");
-		computerDAO.addComputer(computer);
+		computerDAO.addOrUpdateComputer(computer);
 	}
 	
 	/* (non-Javadoc)
@@ -71,15 +71,6 @@ public class ComputerService implements IComputerService {
 	public void deleteComputer(long computerId) throws SQLException {
 		logger.info("ComputerService.deleteComputer called");
 		computerDAO.deleteComputer(computerId);
-	}
-	
-	/* (non-Javadoc)
-	 * @see com.excilys.computerdb.services.IComputerService#updateComputer(com.excilys.computerdb.model.Computer)
-	 */
-	@Override
-	public void updateComputer(Computer computer) throws SQLException {
-		logger.info("ComputerService.updateComputer called");
-		computerDAO.updateComputer(computer);
 	}
 
 }

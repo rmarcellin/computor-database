@@ -14,14 +14,12 @@ public enum Command {
 	GET_ALL_COMPUTERS ("allComputers") {
 		@Override
 		public void execute(CompanyService companyService) throws SQLException {
-			// TODO method
 			
 		}
 
 		@Override
 		public void execute(ComputerService computerService)
 				throws SQLException {
-			// TODO method
 			
 		}
 	},
@@ -29,14 +27,12 @@ public enum Command {
 
 		@Override
 		public void execute(CompanyService companyService) throws SQLException {
-			// TODO method
 			
 		}
 
 		@Override
 		public void execute(ComputerService computerService)
 				throws SQLException {
-			// TODO method
 			
 		}
 	},
@@ -44,14 +40,12 @@ public enum Command {
 
 		@Override
 		public void execute(CompanyService companyService) throws SQLException {
-			// TODO method
 			
 		}
 
 		@Override
 		public void execute(ComputerService computerService)
 				throws SQLException {
-			// TODO method
 			
 		}
 	},
@@ -59,14 +53,12 @@ public enum Command {
 
 		@Override
 		public void execute(CompanyService companyService) throws SQLException {
-			// TODO method
 			
 		}
 
 		@Override
 		public void execute(ComputerService computerService)
 				throws SQLException {
-			// TODO method
 			
 		}
 	},
@@ -74,14 +66,12 @@ public enum Command {
 
 		@Override
 		public void execute(CompanyService companyService) throws SQLException {
-			// TODO method
 			
 		}
 
 		@Override
 		public void execute(ComputerService computerService)
 				throws SQLException {
-			// TODO method
 			
 		}
 	},
@@ -89,14 +79,12 @@ public enum Command {
 
 		@Override
 		public void execute(CompanyService companyService) throws SQLException {
-			// TODO method
 			
 		}
 
 		@Override
 		public void execute(ComputerService computerService)
 				throws SQLException {
-			// TODO method
 			
 		}
 	},
@@ -104,14 +92,12 @@ public enum Command {
 
 		@Override
 		public void execute(CompanyService companyService) throws SQLException {
-			// TODO method
 			
 		}
 
 		@Override
 		public void execute(ComputerService computerService)
 				throws SQLException {
-			// TODO method
 			
 		}
 	};

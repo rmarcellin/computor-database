@@ -43,7 +43,7 @@
                                 		<spring:message code="computer.name" />
                                 	</c:set>
                                 </label>
-                                <input type="text" class="form-control" id="computerName" name="name" placeholder="${ namePlaceholder }">
+                                <input type="text" class="form-control" id="computerName" name="name" placeholder="${ namePlaceholder }"/>
                                 <form:errors path="name" cssClass="error"/>
                             </div>
                             <div class="form-group">
@@ -53,7 +53,7 @@
                                 		<spring:message code="intro.date" />
                                 	</c:set>
                                 </label>
-                                <input type="date" class="form-control" id="introduced" name="introduced" placeholder="${ introPlaceholder }">
+                                <input type="date" class="form-control" id="introduced" name="introduced" placeholder="${ introPlaceholder }"/>
                                 <form:errors path="introduced" cssClass="error"/>
                             </div>
                             <div class="form-group">
@@ -63,7 +63,7 @@
                                 		<spring:message code="disco.date" />
                                 	</c:set>                                
                                 </label>
-                                <input type="date" class="form-control" id="discontinued" name="discontinued" placeholder="${ discoPlaceholder }">
+                                <input type="date" class="form-control" id="discontinued" name="discontinued" placeholder="${ discoPlaceholder }"/>
                                 <form:errors path="discontinued" cssClass="error"/>
                             </div>
                             <div class="form-group">
@@ -83,7 +83,7 @@
                             </div>                  
                         </fieldset>
                         <div class="actions pull-right">
-                            <input type="submit" value="<spring:message code="add"/>" class="btn btn-primary">
+                            <input type="submit" value="<spring:message code="add"/>" class="btn btn-primary"/>
                             <spring:message code="or"/>
                             <a href="${ allComputer }" class="btn btn-default"><spring:message code="cancel"/></a>
                         </div>

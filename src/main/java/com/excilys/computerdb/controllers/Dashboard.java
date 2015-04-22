@@ -1,4 +1,4 @@
-package com.excilys.computerdb.servlets;
+package com.excilys.computerdb.controllers;
 
 import java.io.IOException;
 import java.sql.SQLException;

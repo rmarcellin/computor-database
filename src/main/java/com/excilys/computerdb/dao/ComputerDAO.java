@@ -1,60 +1,43 @@
 package com.excilys.computerdb.dao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.sql.Types;
-import java.util.ArrayList;
 import java.util.List;
+
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.PreparedStatementCreator;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.computerdb.exception.DAOException;
-import com.excilys.computerdb.mapper.ComputerMapper;
 import com.excilys.computerdb.model.Computer;
-import com.excilys.computerdb.utils.Util;
+import com.excilys.computerdb.model.QCompany;
+import com.excilys.computerdb.model.QComputer;
+import com.mysema.query.jpa.hibernate.HibernateDeleteClause;
+import com.mysema.query.jpa.hibernate.HibernateQuery;
+import com.mysema.query.types.OrderSpecifier;
+import com.mysema.query.types.path.PathBuilder;
+import com.mysema.query.types.path.StringPath;
 
 /**
  * The Class ComputerDAO.
  */
 @Repository
+@Transactional
 public class ComputerDAO implements IComputerDAO {
 
-	/** The repository. */
 	@Autowired
-	private IDAOFactory daoFactory;
-	@Autowired
-	private JdbcTemplate jdbcTemplate;
-	
-	private final String SQL = "SELECT "
-			+ "compu.id, "
-			+ "compu.name, "
-			+ "compu.introduced, "
-			+ "compu.discontinued, "
-			+ "compu.company_id, "
-			+ "compa.name "
-			+ "FROM computer compu LEFT OUTER JOIN company compa ON compu.company_id = compa.id";
+	private SessionFactory sessionFactory;
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(ComputerDAO.class);
 
-	/**
-	 * Instantiates a new computer dao.
-	 *
-	 * @param daoFactory
-	 *            the repository dao
-	 */
-	@Autowired
-	public ComputerDAO(DAOFactory daoFactory) {
+	public ComputerDAO() {
+		super();
 		logger.info("ComputerDAO called");
-		this.daoFactory = daoFactory;
 	}
 
 	/*
@@ -66,14 +49,19 @@ public class ComputerDAO implements IComputerDAO {
 	public void deleteComputer(long compId) throws SQLException {
 		logger.info("ComputerDAO.deleteComputer called - ComputerId : {}",
 				compId);
+		sessionFactory.openSession();
 		if (compId == 0) {
 			logger.error("ComputerDAO.deleteComputer - Computer Id null");
 			throw new IllegalArgumentException();
 		}
 
-		final String SQL_DELETE_COMPUTER = "DELETE FROM computer WHERE id = "
-				+ compId;
-		int status = jdbcTemplate.update(SQL_DELETE_COMPUTER);
+		QComputer compu = QComputer.computer;
+		Session session = sessionFactory.getCurrentSession();
+		Transaction tx = session.getTransaction();
+		tx.begin();
+		long status = new HibernateDeleteClause(session, compu)
+				.where(compu.id.eq(compId)).execute();
+		tx.commit();
 
 		if (status == 0) {
 			logger.error(
@@ -81,9 +69,6 @@ public class ComputerDAO implements IComputerDAO {
 					compId);
 			throw new DAOException("Failed to delete the computer");
 		}
-
-		// Removing the current connection from the ThreadLocal
-		daoFactory.removeConnection();
 
 		logger.info(
 				"ComputerDAO.deleteComputer - Computer \"{}\" eleted successifuly",
@@ -94,150 +79,27 @@ public class ComputerDAO implements IComputerDAO {
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * com.excilys.computerdb.dao.IComputerDAO#updateComputer(com.excilys.computerdb
-	 * .model.Computer)
-	 */
-	@Override
-	public void updateComputer(Computer computer) throws SQLException {
-		logger.info("ComputerDAO.updateComputer : {} called",
-				computer.getName());
-		if (computer.getName() == null) {
-			logger.error("ComputerDAO.updateComputer - computer name null");
-			throw new IllegalArgumentException();
-		}
-
-		final String SQL_UPDATE_COMPUTER = "UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE id = ?";
-
-		int status = jdbcTemplate.update(new PreparedStatementCreator() {
-
-			@Override
-			public PreparedStatement createPreparedStatement(
-					Connection connection) throws SQLException {
-				PreparedStatement ps = connection
-						.prepareStatement(SQL_UPDATE_COMPUTER);
-
-				ps.setString(1, computer.getName());
-
-				if (computer.getIntroduced() != null) {
-					Timestamp introduced = Util
-							.getTimeStampFromLocalDate(computer.getIntroduced());
-					ps.setTimestamp(2, introduced);
-				} else {
-					ps.setNull(2, Types.TIMESTAMP);
-				}
-
-				if (computer.getDiscontinued() != null) {
-					Timestamp discontinued = Util
-							.getTimeStampFromLocalDate(computer
-									.getDiscontinued());
-					ps.setTimestamp(3, discontinued);
-				} else {
-					ps.setNull(3, Types.TIMESTAMP);
-				}
-
-				if (computer.getCompany().getId() != 0) {
-					ps.setLong(4, computer.getCompany().getId());
-				} else {
-					ps.setNull(4, Types.LONGVARCHAR);
-				}
-
-				ps.setLong(5, computer.getId());
-
-				return ps;
-			}
-		});
-
-		// Removing the current connection from the ThreadLocal
-		daoFactory.removeConnection();
-
-		if (status == 0) {
-			logger.error(
-					"ComputerDAO.updateComputer : {} - Failed [DAOException]",
-					computer.getName());
-			throw new DAOException("Failed to update computer" + computer);
-		}
-
-		logger.info("ComputerDAO.updateComputer \"{}\" updated successifuly",
-				computer.getName());
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
 	 * com.excilys.computerdb.dao.IComputerDAO#addComputer(com.excilys.computerdb
 	 * .model.Computer)
 	 */
+	//@Cascade(value = CascadeType.SAVE_UPDATE)
 	@Override
-	public void addComputer(Computer comp) throws SQLException {
+	public void addOrUpdateComputer(Computer computer) throws SQLException {
 		logger.info("ComputerDAO.addComputer called - Computer name : "
-				+ comp.getName());
-		if (comp.getName() == null) {
+				+ computer.getName());
+		if (computer.getName() == null) {
 			logger.error("ComputerDAO.addComputer : Computer name is null");
 			throw new IllegalArgumentException();
 		}
-
-		String name = comp.getName().trim();
+		String name = computer.getName().trim();
 		if (name.isEmpty()) {
 			logger.error("ComputerDAO.addComputer : Computer name empty");
 			throw new IllegalArgumentException();
 		}
-
-		final String SQL_CREATE_COMPUTER = "INSERT INTO computer (name, introduced, discontinued, company_id) "
-				+ "VALUES (?, ?, ?, ?)";
-
-		KeyHolder keyHolder = new GeneratedKeyHolder();
-		int status = jdbcTemplate.update(new PreparedStatementCreator() {
-
-			@Override
-			public PreparedStatement createPreparedStatement(
-					Connection connection) throws SQLException {
-				PreparedStatement ps = connection.prepareStatement(
-						SQL_CREATE_COMPUTER, new String[] { "id" });
-
-				ps.setString(1, name);
-
-				if (comp.getIntroduced() != null) {
-					Timestamp introduced = Util.getTimeStampFromLocalDate(comp
-							.getIntroduced());
-					ps.setTimestamp(2, introduced);
-				} else {
-					ps.setNull(2, Types.TIMESTAMP);
-				}
-
-				if (comp.getDiscontinued() != null) {
-					Timestamp discontinued = Util
-							.getTimeStampFromLocalDate(comp.getDiscontinued());
-					ps.setTimestamp(3, discontinued);
-				} else {
-					ps.setNull(3, Types.TIMESTAMP);
-				}
-
-				if (comp.getCompany().getId() != 0) {
-					ps.setLong(4, comp.getCompany().getId());
-				} else {
-					ps.setNull(4, Types.LONGVARCHAR);
-				}
-
-				return ps;
-			}
-		}, keyHolder);
-
-		if (status == 0) {
-			logger.error(
-					"ComputerDAO.addComputer : {} - Failed [DAOException]",
-					comp.getName());
-			throw new DAOException("Failed to update computer" + comp);
-		}
-
-		comp.setId((long) keyHolder.getKey());
-
-		logger.info(
-				"ComputerDAO.addComputer - Computer : {} created successifuly - Generated Id : {}",
-				comp.getName(), comp.getId());
-
-		// Removing the current connection from the ThreadLocal
-		daoFactory.removeConnection();
+		Session session = sessionFactory.getCurrentSession();
+		// TODO Remove the above line and configure Date API to solve "unsaved transient instance"
+		session.saveOrUpdate(computer.getCompany());
+		session.saveOrUpdate(computer);
 	}
 
 	/*
@@ -254,16 +116,17 @@ public class ComputerDAO implements IComputerDAO {
 			throw new IllegalArgumentException();
 		}
 
-		final String SQL_SELECT_ONE_COMPUTER_BY_ID = "SELECT * FROM computer WHERE id = "
-				+ criteria;
-		Computer comp = jdbcTemplate.query(SQL_SELECT_ONE_COMPUTER_BY_ID,
-				new ComputerMapper()).get(0);
-		// Removing the current connection from the ThreadLocal
-		daoFactory.removeConnection();
-		// Logging success info
-		logger.info("Computer \"{}\" retrieved successifuly", comp.getName());
+		QComputer compu = QComputer.computer;
+		Session session = sessionFactory.getCurrentSession();
+		HibernateQuery query = new HibernateQuery(session);
 
-		return comp;
+		Computer computer = query.from(compu).where(compu.id.eq(criteria))
+				.uniqueResult(compu);
+		// Logging success info
+		logger.info("Computer \"{}\" retrieved successifuly",
+				computer.getName());
+
+		return computer;
 	}
 
 	/*
@@ -287,13 +150,12 @@ public class ComputerDAO implements IComputerDAO {
 			throw new IllegalArgumentException("Search criteria empty");
 		}
 
-		final String SQL_SELECT_ONE_COMPUTER_BY_NAME = "SELECT * FROM computer WHERE name = "
-				+ tmpName;
-		Computer computer = jdbcTemplate.query(SQL_SELECT_ONE_COMPUTER_BY_NAME,
-				new ComputerMapper()).get(0);
+		QComputer compu = QComputer.computer;
+		Session session = sessionFactory.getCurrentSession();
+		HibernateQuery query = new HibernateQuery(session);
 
-		// Removing the current connection from the ThreadLocal
-		daoFactory.removeConnection();
+		Computer computer = query.from(compu).where(compu.name.eq(tmpName))
+				.uniqueResult(compu);
 
 		// Logging success info
 		logger.info("Computer \"{}\" retrieved successifuly",
@@ -314,18 +176,30 @@ public class ComputerDAO implements IComputerDAO {
 			throws SQLException {
 		logger.info("ComputerDAO.getComputers called - Arguments : {}, {}",
 				key, sortOrder);
+
+		QComputer compu = QComputer.computer;
+		QCompany compa = QCompany.company;
+		Session session = sessionFactory.getCurrentSession();
+		HibernateQuery query = new HibernateQuery(session);
 		List<Computer> listComp = null;
-		
+		logger.debug("coucou1");
 		if (key == null || sortOrder == null) {
-			listComp = jdbcTemplate.query(SQL,
-					new ComputerMapper());
+			listComp = query.from(compu).leftJoin(compu.company, compa)
+					.list(compu);
 		} else {
-			final String SQL_SORTED = SQL + " ORDER BY compu." + key + " " + sortOrder;
-			listComp = jdbcTemplate.query(SQL_SORTED,
-					new ComputerMapper());
+			PathBuilder<Computer> computerPath = new PathBuilder<Computer>(
+					Computer.class, "computer");
+			StringPath defKey = computerPath.getString(key.trim());
+			OrderSpecifier<String> orderSpecifier = null;
+			QComputer.computer.name.asc();
+			if (sortOrder.equals("asc")) {
+				orderSpecifier = defKey.asc();
+			} else {
+				orderSpecifier = defKey.desc();
+			}
+			listComp = query.from(compu).leftJoin(compu.company, compa)
+					.orderBy(orderSpecifier).list(compu);
 		}
-		// Removing the current connection from the ThreadLocal
-		daoFactory.removeConnection();
 
 		// Logging success info
 		logger.info("All computers retrieved successifuly");
@@ -349,18 +223,17 @@ public class ComputerDAO implements IComputerDAO {
 			logger.info("ComputerDAO.getComputersSearched - Criteria null");
 			return null;
 		}
-		List<Computer> listComp = new ArrayList<>();
 
-		final String SQL_SEARCH = SQL + " WHERE UCASE(compu.name) "
-				+ "LIKE ? or UCASE(compa.name) LIKE ?";
+		QComputer compu = QComputer.computer;
+		QCompany compa = QCompany.company;
+		Session session = sessionFactory.getCurrentSession();
+		HibernateQuery query = new HibernateQuery(session);
 
-		listComp = jdbcTemplate.query(SQL_SEARCH, new Object[] {
-				"%" + criteria + "%", "%" + criteria + "%" },
-				new ComputerMapper());
-
-		// Removing the current connection from the ThreadLocal
-		daoFactory.removeConnection();
-
+		List<Computer> listComp = query
+				.from(compu)
+				.leftJoin(compu.company, compa)
+				.where(compu.name.contains(criteria).or(
+						compa.name.contains(criteria))).list(compu);
 		logger.info("ComputerDAO.getComputersSearched - All computers retrieved successifuly");
 
 		return listComp;

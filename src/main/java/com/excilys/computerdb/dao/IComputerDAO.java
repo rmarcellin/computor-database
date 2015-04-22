@@ -19,19 +19,6 @@ public interface IComputerDAO {
 	void deleteComputer(long compId) throws SQLException;
 
 	/**
-	 * Update computer db.
-	 *
-	 * @param compId
-	 *            the comp id
-	 * @param values
-	 *            the values
-	 * @return the computer
-	 * @throws SQLException
-	 *             the SQL exception
-	 */
-	void updateComputer(Computer computer) throws SQLException;
-
-	/**
 	 * Adds the computer to db.
 	 *
 	 * @param comp
@@ -39,7 +26,7 @@ public interface IComputerDAO {
 	 * @throws SQLException
 	 *             the SQL exception
 	 */
-	void addComputer(Computer comp) throws SQLException;
+	void addOrUpdateComputer(Computer comp) throws SQLException;
 
 	/**
 	 * Gets the computer by id.
