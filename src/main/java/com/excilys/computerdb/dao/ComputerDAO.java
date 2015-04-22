@@ -82,7 +82,6 @@ public class ComputerDAO implements IComputerDAO {
 	 * com.excilys.computerdb.dao.IComputerDAO#addComputer(com.excilys.computerdb
 	 * .model.Computer)
 	 */
-	//@Cascade(value = CascadeType.SAVE_UPDATE)
 	@Override
 	public void addOrUpdateComputer(Computer computer) throws SQLException {
 		logger.info("ComputerDAO.addComputer called - Computer name : "
@@ -98,7 +97,7 @@ public class ComputerDAO implements IComputerDAO {
 		}
 		Session session = sessionFactory.getCurrentSession();
 		// TODO Remove the above line and configure Date API to solve "unsaved transient instance"
-		session.saveOrUpdate(computer.getCompany());
+		//session.saveOrUpdate(computer.getCompany());
 		session.saveOrUpdate(computer);
 	}
 

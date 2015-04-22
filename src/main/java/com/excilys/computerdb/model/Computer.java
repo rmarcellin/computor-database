@@ -11,6 +11,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.Type;
 import org.joda.time.LocalDate;
 
@@ -49,6 +51,7 @@ public class Computer implements Serializable {
 	/** The company id. */
 	@OneToOne
 	@JoinColumn(name = "company_id")
+	@Cascade(value = CascadeType.SAVE_UPDATE)
 	private Company company;
 	
 	/**
