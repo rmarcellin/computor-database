@@ -16,6 +16,7 @@ import com.excilys.computerdb.exception.DAOException;
 import com.excilys.computerdb.model.Computer;
 import com.excilys.computerdb.model.QCompany;
 import com.excilys.computerdb.model.QComputer;
+
 import com.mysema.query.jpa.hibernate.HibernateDeleteClause;
 import com.mysema.query.jpa.hibernate.HibernateQuery;
 import com.mysema.query.types.OrderSpecifier;
