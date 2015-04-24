@@ -42,6 +42,7 @@ local.properties
 .log
 .MF
 .gitignore~
+*/.gitignore
  
 # Locally stored "Eclipse launch configurations"
 *.launch

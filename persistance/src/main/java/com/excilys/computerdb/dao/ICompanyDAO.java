@@ -7,8 +7,6 @@ import com.excilys.computerdb.model.Company;
 
 public interface ICompanyDAO {
 
-	public abstract Company getCompanyIdByName(String name) throws SQLException;
-
 	/**
 	 * Gets the companies.
 	 *

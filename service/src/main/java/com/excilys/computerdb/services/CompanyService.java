@@ -8,8 +8,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.excilys.computerdb.dao.*;
-import com.excilys.computerdb.model.*;
+import com.excilys.computerdb.dao.ICompanyDAO;
+import com.excilys.computerdb.model.Company;
 
 @Service
 public class CompanyService implements ICompanyService {

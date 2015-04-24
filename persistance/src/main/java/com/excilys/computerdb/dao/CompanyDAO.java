@@ -47,35 +47,6 @@ public class CompanyDAO implements ICompanyDAO {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * com.excilys.computerdb.dao.ICompanyDAO#getCompanyIdByName(java.lang.String
-	 * )
-	 */
-	@Override
-	public Company getCompanyIdByName(String name) throws SQLException {
-		logger.info("CompanyDAO.getCompanyIdByName called - Argument : {}",
-				name);
-		if (name == null) {
-			logger.error("CompanyDAO.getCompanyIdByName - name null");
-			throw new IllegalArgumentException();
-		}
-
-		String tmpName = name.trim();
-		if (tmpName.isEmpty()) {
-			logger.error("CompanyDAO.getCompanyIdByName - name empty");
-			throw new IllegalArgumentException();
-		}
-
-		QCompany compa = QCompany.company;
-		Session session = sessionFactory.getCurrentSession();
-
-		return new HibernateQuery(session).from(compa)
-				.where(compa.name.eq(tmpName)).singleResult(compa);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
 	 * @see com.excilys.computerdb.dao.ICompanyDAO#getCompanies()
 	 */
 	@Override

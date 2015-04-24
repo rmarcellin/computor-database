@@ -4,6 +4,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +21,6 @@ import com.excilys.computerdb.dto.ComputerDTO;
 import com.excilys.computerdb.exception.DAOException;
 import com.excilys.computerdb.model.Computer;
 import com.excilys.computerdb.services.IComputerService;
-import com.excilys.computerdb.ui.Page;
 import com.excilys.computerdb.utils.Util;
 
 /**

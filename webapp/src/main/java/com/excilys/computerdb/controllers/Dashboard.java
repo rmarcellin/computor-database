@@ -6,6 +6,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.excilys.computerdb.dto.ComputerDTO;
 import com.excilys.computerdb.model.Computer;
 import com.excilys.computerdb.services.IComputerService;
-import com.excilys.computerdb.ui.Page;
 import com.excilys.computerdb.utils.Util;
 
 /**
@@ -65,13 +68,19 @@ public class Dashboard {
 		sortKeyOrder.put("discontinued", "default");
 		sortKeyOrder.put("company_id", "default");
 	}
+	
+	@RequestMapping(value = "/index", method = RequestMethod.GET)
+	public String test() {
+		System.out.println("hello world !");
+		return "dashboard";
+	}
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
 	@RequestMapping(method = RequestMethod.GET)
-	protected String doGet(ModelMap model,
+	public String doGet(ModelMap model,
 			@RequestParam(value = "sortKey", required = false) String sortKey,
 			@RequestParam(value = "pageNum", required = false) String pageNum,
 			@RequestParam(value = "startP", required = false) String startP) {

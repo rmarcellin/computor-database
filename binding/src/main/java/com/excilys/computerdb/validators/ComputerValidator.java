@@ -6,20 +6,19 @@ import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
 import com.excilys.computerdb.dto.ComputerDTO;
 
+@Component
 public class ComputerValidator implements Validator {
 	
 	@Autowired
 	private MessageSource messageSource;
 	
-	/**
-	 * FIELDS
-	 */
 	private static final String NAME = "name";
 
 	@Override
@@ -86,9 +85,6 @@ public class ComputerValidator implements Validator {
 				}
 			}
 		}
-	}
-	
-	
-	
+	}	
 	
 }
