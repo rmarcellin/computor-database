@@ -50,7 +50,6 @@ public class ComputerDAO implements IComputerDAO {
 	public void deleteComputer(long compId) throws SQLException {
 		logger.info("ComputerDAO.deleteComputer called - ComputerId : {}",
 				compId);
-		sessionFactory.openSession();
 		if (compId == 0) {
 			logger.error("ComputerDAO.deleteComputer - Computer Id null");
 			throw new IllegalArgumentException();
@@ -96,10 +95,7 @@ public class ComputerDAO implements IComputerDAO {
 			logger.error("ComputerDAO.addComputer : Computer name empty");
 			throw new IllegalArgumentException();
 		}
-		Session session = sessionFactory.getCurrentSession();
-		// TODO Remove the above line and configure Date API to solve "unsaved transient instance"
-		//session.saveOrUpdate(computer.getCompany());
-		session.saveOrUpdate(computer);
+		sessionFactory.getCurrentSession().saveOrUpdate(computer);
 	}
 
 	/*

@@ -35,6 +35,7 @@ public class Company implements Serializable  {
 	 * Instantiates a new company.
 	 */
 	public Company() {
+		super();
 	}
 
 	/**

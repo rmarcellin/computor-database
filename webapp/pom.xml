@@ -11,6 +11,7 @@
 	</parent>
 	
 	<dependencies>
+		<!--  SUB MODULES DEPENDENCY -->
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>service</artifactId>			
@@ -19,6 +20,7 @@
 			<groupId>${project.groupId}</groupId>
 			<artifactId>binding</artifactId>			
 		</dependency>
+		<!-- SPRING FRAMEWORK -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-web</artifactId>
@@ -30,6 +32,24 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
+		</dependency>
+		<!-- SPRING SECURITY -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-core</artifactId>
+			<version>4.0.0.RELEASE</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-web</artifactId>
+			<version>4.0.0.RELEASE</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-config</artifactId>
+			<version>4.0.0.RELEASE</version>
 		</dependency>
 		<dependency>
 			<groupId>javax.servlet.jsp</groupId>

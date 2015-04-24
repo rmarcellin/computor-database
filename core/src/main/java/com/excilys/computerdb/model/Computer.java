@@ -57,7 +57,9 @@ public class Computer implements Serializable {
 	/**
 	 * Instantiates a new computer.
 	 */
-	public Computer() {}
+	public Computer() {
+		super();
+	}
 	
 	
 

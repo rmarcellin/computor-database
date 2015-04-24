@@ -62,5 +62,11 @@
 			<groupId>com.jolbox</groupId>
 			<artifactId>bonecp</artifactId>
 		</dependency>
+		<!-- SPRING SECURITY -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-core</artifactId>
+			<version>4.0.0.RELEASE</version>
+		</dependency>
 	</dependencies>
 </project>
