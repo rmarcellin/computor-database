@@ -7,16 +7,38 @@
            http://www.springframework.org/schema/security
            http://www.springframework.org/schema/security/spring-security-4.0.xsd">
 
-	<http auto-config='true'>
-		<intercept-url pattern="/**" access="hasRole('ROLE_USER')" />
+	<http use-expressions="false" entry-point-ref="digestEntryPoint">
+		<intercept-url pattern="/Dashboard**" access="ROLE_USER, ROLE_ADMIN" />
+		<intercept-url pattern="/AddComputer**" access="ROLE_ADMIN" />
+		<intercept-url pattern="/EditComputer**" access="ROLE_ADMIN" />
+		<custom-filter ref="digestFilter" after="BASIC_AUTH_FILTER" />
+		
+		<!--This element will add Cross Site Request Forger (CSRF) protection to the application.  -->	 
+		<csrf/>
+		
+		<!-- Prevents multiple logins from different places --> 
+		<session-management>
+	 		<concurrency-control max-sessions="1" error-if-maximum-exceeded="true" />
+		</session-management>
+		
 	</http>
+	
+	<beans:bean id="digestEntryPoint"
+		class="org.springframework.security.web.authentication.www.DigestAuthenticationEntryPoint">
+		<beans:property name="realmName" value="cdb" />
+		<beans:property name="key" value="cbdKey" />		
+	</beans:bean>
+	
+	<beans:bean id="userDetailsService"
+		class="org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl">
+		<beans:property name="dataSource" ref="datasource" />
+	</beans:bean>
 
-	<beans:bean id="userDAO" class="com.excilys.computerdb.dao.UserDAO" />
-	
-	<authentication-manager alias="authenticationManager">
-        <authentication-provider user-service-ref="userDAO" />
-    </authentication-manager>
-	
-	<!-- DEFINE securityDataSource BEAN -->
+	<beans:bean id="digestFilter"
+		class="org.springframework.security.web.authentication.www.DigestAuthenticationFilter">
+		<beans:property name="userDetailsService" ref="userDetailsService" />
+		<beans:property name="authenticationEntryPoint" ref="digestEntryPoint" />
+		<beans:property name="passwordAlreadyEncoded" value="false" />
+	</beans:bean>
 
 </beans:beans>
